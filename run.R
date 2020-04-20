@@ -22,8 +22,8 @@ ui <- dashboardPage(
       uiOutput("choose_country")
     ),
     fluidRow(
-      box(title = "Casos registrados", plotOutput("plot_incidence_2", height = 250)),
-      box(title = "Estimacion de tasa R",plotOutput("plot_estimR_2", height = 250))
+      box(title = "Casos registrados", plotOutput("plot_incidence_country", height = 250)),
+      box(title = "Estimacion de tasa R",plotOutput("plot_estimR_country", height = 250))
     )
   )
 )
@@ -71,11 +71,11 @@ server <- function(input, output,session) {
       selectInput("pais", "Pais", unique(data[,"location"]))
   })
 
-  datos_country <- data[data$location == 'Uruguay',]
+  datos_country <- data[data$location == input$pais,]
   times_country <- as.Date(datos_country[,"date"])
   serie_country <- xts(datos_country[,c("new_cases")],order.by=times_country)
 
-  res_country <- estimate_R(incid = datos_uy[,"new_cases"],
+  res_country <- estimate_R(incid = datos_country[,"new_cases"],
                   method = "non_parametric_si",
                   config = make_config(list(si_distr = discrete_si_distr)))
 
