@@ -14,7 +14,7 @@ ui <- dashboardPage(
     fluidRow(
      box(plotOutput("plot_incidence", height = 250)),
      box(plotOutput("plot_estimR", height = 250))
-   )
+   ),
    fluidRow(
      uiOutput("choose_country")
   )

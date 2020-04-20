@@ -3,12 +3,18 @@
 # Example R code to install packages if not already installed
 #
 
-install.packages("mcmc")
+if ("mcmc" %in% rownames(installed.packages()) == FALSE) {
+  install.packages("mcmc")
+}
 
-install.packages("quantreg")
+if ("quantreg" %in% nowames(installed.packages()) == FALSE) {
+  install.packages("quantreg")
+}
 
-packageurl <- "https://cran.r-project.org/src/contrib/Archive/MCMCpack/MCMCpack_1.4-4.tar.gz"
-install.packages(packageurl, repos=NULL, type="source")
+if ("MCMCpack" %in% rownames(installed.packages()) == FALSE) {
+  packageurl <- "https://cran.r-project.org/src/contrib/Archive/MCMCpack/MCMCpack_1.4-4.tar.gz"
+  install.packages(packageurl, repos=NULL, type="source")
+}
 
 my_packages = c("shinydashboard","xts","EpiEstim")
 
