@@ -3,7 +3,7 @@ library(shiny)
 library(shinydashboard)
 
 ui <- dashboardPage(
-  dashboardHeader("Hola"),
+  dashboardHeader(),
   dashboardSidebar(),
   dashboardBody()
 )
