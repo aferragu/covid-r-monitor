@@ -80,12 +80,12 @@ server <- function(input, output,session) {
                         method = "non_parametric_si",
                         config = make_config(list(si_distr = discrete_si_distr)))
 
-        times2_country=tail(times_country,-7)
+        times2_country <- tail(times_country,-7)
         serieR_country <- xts(res_country$R[,c("Median(R)")],order.by=times2_country)
         serieRl_country <- xts(res_country$R[,c("Quantile.0.025(R)")],order.by=times2_country)
         serieRu_country <- xts(res_country$R[,c("Quantile.0.975(R)")],order.by=times2_country)
 
-        return serieR_country
+        serieR_country
       }
     )
 
