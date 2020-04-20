@@ -3,7 +3,7 @@
 # Example R code to install packages if not already installed
 #
 
-my_packages = c("shinydashboard","xts","EpiEstim")
+my_packages = c("shinydashboard","xts","coarseDataTools","EpiEstim")
 
 install_if_missing = function(p) {
   if (p %in% rownames(installed.packages()) == FALSE) {
