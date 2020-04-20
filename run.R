@@ -91,12 +91,12 @@ server <- function(input, output,session) {
 
   output$plot_incidence_country <- renderPlot({
     datos <- actualizar_pais()
-    plot(datos$serie_country)
+    plot(datos$serie)
   })
 
   output$plot_estimR_country <- renderPlot({
     datos <- actualizar_pais()
-    plot(serieR_country)
+    plot(datos$R)
 #    lines(serieRl)
 #    lines(serieRu)
 #    abline(h=1,col="red",lwd=2)
