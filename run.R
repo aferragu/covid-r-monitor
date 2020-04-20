@@ -74,7 +74,7 @@ server <- function(input, output,session) {
   actualizar_pais <- reactive( {
         datos_country <- data[data$location == input$pais,]
         times_country <- as.Date(datos_country[,"date"])
-        serie_country <- xts(datos_country[,c("new_cases")],order.by=times_country)
+        serie_x|country <- xts(datos_country[,c("new_cases")],order.by=times_country)
 
         res_country <- estimate_R(incid = datos_country[,"new_cases"],
                         method = "non_parametric_si",
@@ -84,19 +84,19 @@ server <- function(input, output,session) {
         serieR_country <- xts(res_country$R[,c("Median(R)")],order.by=times2_country)
         serieRl_country <- xts(res_country$R[,c("Quantile.0.025(R)")],order.by=times2_country)
         serieRu_country <- xts(res_country$R[,c("Quantile.0.975(R)")],order.by=times2_country)
-        salida <- list("serie" = serie_country, "R" = serieR_country)
-        return salida
+
+        return serieR_country
       }
     )
 
   output$plot_incidence_country <- renderPlot({
     datos <- actualizar_pais()
-    plot(datos$serie)
+    plot(datos)
   })
 
   output$plot_estimR_country <- renderPlot({
     datos <- actualizar_pais()
-    plot(datos$R)
+    plot(datos)
 #    lines(serieRl)
 #    lines(serieRu)
 #    abline(h=1,col="red",lwd=2)
