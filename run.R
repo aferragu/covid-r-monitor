@@ -68,7 +68,7 @@ server <- function(input, output,session) {
 
 
   output$choose_country <- renderUI({
-      selectInput("pais", "Pais", unique(data[,"location"]))
+      selectInput("pais", "Pais", unique(data[,"location"], selected="Uruguay"))
   })
 
   current_country         <- reactive({ input$pais })
