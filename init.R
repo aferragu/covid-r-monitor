@@ -7,7 +7,7 @@ if ("mcmc" %in% rownames(installed.packages()) == FALSE) {
   install.packages("mcmc")
 }
 
-if ("quantreg" %in% nowames(installed.packages()) == FALSE) {
+if ("quantreg" %in% rownames(installed.packages()) == FALSE) {
   install.packages("quantreg")
 }
 
