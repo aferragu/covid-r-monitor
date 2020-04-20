@@ -10,16 +10,26 @@ ui <- dashboardPage(
   dashboardSidebar(),
   dashboardBody(
     fluidRow(
-          box(
-            width = 8, status = "info", solidHeader = TRUE,
-            title = "Popularity by package (last 5 min)",
-            
-          ),
-        )
+     box(plotOutput("plot1", height = 250)),
 
-  )
+     box(
+       title = "Controls",
+       sliderInput("slider", "Number of observations:", 1, 100, 50)
+     )
+   )
+ )
 )
 
-server <- function(input, output) { }
+
+
+server <- function(input, output) {
+  set.seed(122)
+  histdata <- rnorm(500)
+
+  output$plot1 <- renderPlot({
+    data <- histdata[seq_len(input$slider)]
+    hist(data)
+  })
+}
 
 shinyApp(ui, server)
