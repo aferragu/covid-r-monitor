@@ -84,7 +84,8 @@ server <- function(input, output,session) {
         serieR_country <- xts(res_country$R[,c("Median(R)")],order.by=times2_country)
         serieRl_country <- xts(res_country$R[,c("Quantile.0.025(R)")],order.by=times2_country)
         serieRu_country <- xts(res_country$R[,c("Quantile.0.975(R)")],order.by=times2_country)
-        return list("serie" = serie_country, "R" = serieR_country)
+        salida <- list("serie" = serie_country, "R" = serieR_country)
+        return salida
       }
     )
 
