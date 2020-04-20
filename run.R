@@ -73,7 +73,7 @@ server <- function(input, output,session) {
 
   current_country         <- reactive({ input$pais })
 
-  datos_country <- data[data$location == current_country,]
+  datos_country <- data[data$location == current_country(),]
   times_country <- as.Date(datos_country[,"date"])
   serie_country <- xts(datos_country[,c("new_cases")],order.by=times_country)
 
