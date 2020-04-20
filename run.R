@@ -71,26 +71,30 @@ server <- function(input, output,session) {
       selectInput("pais", "Pais", unique(data[,"location"], selected="Uruguay"))
   })
 
-  current_country         <- reactive({ input$pais })
+  actualizar_pais <- reactive( {
+        datos_country <- data[data$location == input$pais,]
+        times_country <- as.Date(datos_country[,"date"])
+        serie_country <- xts(datos_country[,c("new_cases")],order.by=times_country)
 
-  datos_country <- data[data$location == current_country(),]
-  times_country <- as.Date(datos_country[,"date"])
-  serie_country <- xts(datos_country[,c("new_cases")],order.by=times_country)
+        res_country <- estimate_R(incid = datos_country[,"new_cases"],
+                        method = "non_parametric_si",
+                        config = make_config(list(si_distr = discrete_si_distr)))
 
-  res_country <- estimate_R(incid = datos_country[,"new_cases"],
-                  method = "non_parametric_si",
-                  config = make_config(list(si_distr = discrete_si_distr)))
-
-  times2_country=tail(times_country,-7)
-  serieR_country <- xts(res_country$R[,c("Median(R)")],order.by=times2_country)
-  serieRl_country <- xts(res_country$R[,c("Quantile.0.025(R)")],order.by=times2_country)
-  serieRu_country <- xts(res_country$R[,c("Quantile.0.975(R)")],order.by=times2_country)
+        times2_country=tail(times_country,-7)
+        serieR_country <- xts(res_country$R[,c("Median(R)")],order.by=times2_country)
+        serieRl_country <- xts(res_country$R[,c("Quantile.0.025(R)")],order.by=times2_country)
+        serieRu_country <- xts(res_country$R[,c("Quantile.0.975(R)")],order.by=times2_country)
+        return list("serie" = serie_country, "R" = serieR_country)
+      }
+    )
 
   output$plot_incidence_country <- renderPlot({
-    plot(serie_country)
+    datos <- actualizar_pais()
+    plot(datos$serie_country)
   })
 
   output$plot_estimR_country <- renderPlot({
+    datos <- actualizar_pais()
     plot(serieR_country)
 #    lines(serieRl)
 #    lines(serieRu)
