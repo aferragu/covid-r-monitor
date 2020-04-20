@@ -13,20 +13,19 @@ ui <- dashboardPage(
   dashboardBody(
     fluidRow(
       infoBox("Uruguay")
-    )
+    ),
     fluidRow(
-     box(title = "Casos registrados", plotOutput("plot_incidence", height = 250)),
-     box(title = "Estimacion de tasa R",plotOutput("plot_estimR", height = 250))
-   ),
-   fluidRow(
-     uiOutput("choose_country")
+      box(title = "Casos registrados", plotOutput("plot_incidence", height = 250)),
+      box(title = "Estimacion de tasa R",plotOutput("plot_estimR", height = 250))
+    ),
+    fluidRow(
+      uiOutput("choose_country")
+    ),
+    fluidRow(
+      box(title = "Casos registrados", plotOutput("plot_incidence_2", height = 250)),
+      box(title = "Estimacion de tasa R",plotOutput("plot_estimR_2", height = 250))
+    )
   )
-  fluidRow(
-   box(title = "Casos registrados", plotOutput("plot_incidence_2", height = 250)),
-   box(title = "Estimacion de tasa R",plotOutput("plot_estimR_2", height = 250))
- ),
-
- )
 )
 
 
