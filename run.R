@@ -26,6 +26,7 @@ ui <- dashboardPage(
 server <- function(input, output) {
 
   download.file("https://covid.ourworldindata.org/data/ecdc/full_data.csv", "full_data.csv")
+  data <- read.csv(file = 'full_data.csv')
   datos_uy <- data[data$location == 'Uruguay',]
   times <- as.Date(datos_uy[,"date"])
   serie <- xts(datos_uy[,c("new_cases")],order.by=times)
