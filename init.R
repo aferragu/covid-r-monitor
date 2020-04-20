@@ -3,6 +3,10 @@
 # Example R code to install packages if not already installed
 #
 
+install.packages("mcmc")
+
+install.packages("quantreg")
+
 packageurl <- "https://cran.r-project.org/src/contrib/Archive/MCMCpack/MCMCpack_1.4-4.tar.gz"
 install.packages(packageurl, repos=NULL, type="source")
 
