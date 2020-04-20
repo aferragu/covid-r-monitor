@@ -13,9 +13,11 @@ ui <- dashboardPage(
   dashboardBody(
     fluidRow(
      box(plotOutput("plot_incidence", height = 250)),
-     box(plotOutput("plot_estimR", height = 250)),
-
+     box(plotOutput("plot_estimR", height = 250))
    )
+   fluidRow(
+     uiOutput("choose_country")
+  )
  )
 )
 
@@ -55,6 +57,11 @@ server <- function(input, output) {
     abline(h=1,col="red",lwd=2)
     abline(h=0,lwd=2)
 
+  })
+
+
+  output$choose_country <- renderUI({
+      selectInput("pais", "Pais", unique(data[,"location"]))
   })
 
 
