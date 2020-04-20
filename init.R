@@ -3,6 +3,9 @@
 # Example R code to install packages if not already installed
 #
 
+packageurl <- "https://cran.r-project.org/src/contrib/Archive/MCMCpack/MCMCpack_1.4-4.tar.gz"
+install.packages(packageurl, repos=NULL, type="source")
+
 my_packages = c("shinydashboard","xts","EpiEstim")
 
 install_if_missing = function(p) {
