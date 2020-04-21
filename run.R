@@ -20,7 +20,7 @@ ui <- dashboardPage(
       box(title = "Estimacion de tasa R",plotOutput("plot_estimR", height = 250))
     ),
     fluidRow(
-      uiOutput("choose_country")
+      box(title= "Elegir Pais:", uiOutput("choose_country"))
     ),
     fluidRow(
       box(title = "Casos registrados", plotOutput("plot_incidence_country", height = 250)),
@@ -40,7 +40,7 @@ server <- function(input, output,session) {
   serie <- xts(datos_uy[,"new_cases"],order.by=times)
 
   output$plot_incidence <- renderPlot({
-    plot(serie)
+    plot(serie,main="Incidencia", xlab="Casos", ylab="Tiempo")
   })
 
   #estimo el R
@@ -59,10 +59,10 @@ server <- function(input, output,session) {
   serieRu <- xts(res$R[,c("Quantile.0.975(R)")],order.by=times2)
 
   output$plot_estimR <- renderPlot({
-    plot(serieR)
+    plot(serieR,ylim=c(0,3),main="R estimado", xlab="R", ylab="Tiempo" )
     lines(serieRl)
     lines(serieRu)
-
+    abline(h=1,col="red")
   })
 
   output$uruguay <- renderInfoBox({
@@ -85,7 +85,7 @@ server <- function(input, output,session) {
     )
 
   output$plot_incidence_country <- renderPlot({
-      plot(actualizar_serie_pais())
+      plot(actualizar_serie_pais(), main="Incidencia", xlab="Casos", ylab="Tiempo")
   })
 
   actualizar_calculo_pais <- reactive( {
@@ -108,9 +108,10 @@ server <- function(input, output,session) {
 
   output$plot_estimR_country <- renderPlot({
     data <- actualizar_calculo_pais()
-    plot(data$R)
+    plot(data$R,ylim=c(0,3),,main="R estimado", xlab="R", ylab="Tiempo")
     lines(data$Rl)
     lines(data$Ru)
+    abline(h=1,col="red")
 
   })
 
