@@ -62,7 +62,7 @@ server <- function(input, output,session) {
     plot(serieR)
     lines(serieRl)
     lines(serieRu)
-    
+
   })
 
 
@@ -82,26 +82,29 @@ server <- function(input, output,session) {
       plot(actualizar_serie_pais())
   })
 
+  actualizar_serie_pais <- reactive( {
+        datos_country <- data[data$location == input$pais,]
+        times_country <- as.Date(datos_country[,"date"])
+        serie_country <- xts(datos_country[,c("new_cases")],order.by=times_country)
+
+        res_country <- estimate_R(incid = datos_country[,"new_cases"],
+                        method = "non_parametric_si",
+                        config = make_config(list(si_distr = discrete_si_distr)))
+
+        times2_country <- tail(times_country,-7)
+        serieR_country <- xts(res_country$R[,c("Median(R)")],order.by=times2_country)
+        serieRl_country <- xts(res_country$R[,c("Quantile.0.025(R)")],order.by=times2_country)
+        serieRu_country <- xts(res_country$R[,c("Quantile.0.975(R)")],order.by=times2_country)
+
+        list("R"=serieR_country,"Rl"=serieRl_country,"Ru"=serieRu_country)
+      }
+    )
 
   output$plot_estimR_country <- renderPlot({
-    datos_country <- data[data$location == input$pais,]
-    times_country <- as.Date(datos_country[,"date"])
-    serie_country <- xts(datos_country[,c("new_cases")],order.by=times_country)
-
-    res_country <- estimate_R(incid = datos_country[,"new_cases"],
-                    method = "non_parametric_si",
-                    config = make_config(list(si_distr = discrete_si_distr)))
-
-    times2_country <- tail(times_country,-7)
-    serieR_country <- xts(res_country$R[,c("Median(R)")],order.by=times2_country)
-    serieRl_country <- xts(res_country$R[,c("Quantile.0.025(R)")],order.by=times2_country)
-    serieRu_country <- xts(res_country$R[,c("Quantile.0.975(R)")],order.by=times2_country)
-
-    plot(serieR_country)
-#    lines(serieRl)
-#    lines(serieRu)
-#    abline(h=1,col="red",lwd=2)
-#    abline(h=0,lwd=2)
+    data <- actualizar_serie_pais()
+    plot(data["R"])
+    lines(data["Rl"])
+    lines(data["Ru"])
 
   })
 
