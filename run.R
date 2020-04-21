@@ -39,9 +39,8 @@ server <- function(input, output,session) {
   times <- as.Date(datos_uy[,"date"])
   serie <- xts(datos_uy[,"new_cases"],order.by=times)
 
-  output$plot_incidence <- renderPlotly({
-    fig<- plot_ly(x = ~times, y = ~serie[,1], type = 'scatter', mode = 'lines')
-    fig
+  output$plot_incidence <- renderPlot({
+    plot(serie)
   })
 
   #estimo el R
@@ -59,12 +58,11 @@ server <- function(input, output,session) {
   serieRl <- xts(res$R[,c("Quantile.0.025(R)")],order.by=times2)
   serieRu <- xts(res$R[,c("Quantile.0.975(R)")],order.by=times2)
 
-  output$plot_estimR <- renderPlotly({
-
-    fig <- plot_ly(x = ~times2, y = ~serieR[,1], name = 'R0', type = 'scatter', mode = 'lines',width=2)
-    fig <- fig %>% add_trace(y = ~serieRl[,1], name = 'LB', mode = 'lines')
-    fig <- fig %>% add_trace(y = ~serieRu[,1], name = 'UB', mode = 'lines')
-    fig
+  output$plot_estimR <- renderPlot({
+    p<-plot(serieR)
+    p<-p %>% lines(serieRl)
+    p<-p %>% lines(serieRu)
+    p
   })
 
 
@@ -72,26 +70,16 @@ server <- function(input, output,session) {
       selectInput("pais", "Pais", unique(data[,"location"]))
   })
 
-  actualizar_calculo <- reactive( {
-
+  actualizar_serie_pais <- reactive( {
+      datos_country <- data[data$location == input$pais,]
+      times_country <- as.Date(datos_country[,"date"])
+      serie_country <- xts(datos_country[,c("new_cases")],order.by=times_country)
+      serie_country
       }
     )
 
   output$plot_incidence_country <- renderPlot({
-    datos_country <- data[data$location == input$pais,]
-    times_country <- as.Date(datos_country[,"date"])
-    serie_country <- xts(datos_country[,c("new_cases")],order.by=times_country)
-
-    res_country <- estimate_R(incid = datos_country[,"new_cases"],
-                    method = "non_parametric_si",
-                    config = make_config(list(si_distr = discrete_si_distr)))
-
-    times2_country <- tail(times_country,-7)
-    serieR_country <- xts(res_country$R[,c("Median(R)")],order.by=times2_country)
-    serieRl_country <- xts(res_country$R[,c("Quantile.0.025(R)")],order.by=times2_country)
-    serieRu_country <- xts(res_country$R[,c("Quantile.0.975(R)")],order.by=times2_country)
-
-    plot(serie_country)
+      plot(actualizar_serie_pais())
   })
 
   output$plot_estimR_country <- renderPlot({
