@@ -13,7 +13,7 @@ ui <- dashboardPage(
   dashboardSidebar(),
   dashboardBody(
     fluidRow(
-      infoBox("uruguay")
+      infoBoxOutput("uruguay")
     ),
     fluidRow(
       box(title = "Casos registrados", plotOutput("plot_incidence", height = 250)),
