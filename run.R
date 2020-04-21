@@ -62,7 +62,8 @@ server <- function(input, output,session) {
     plot(serieR,ylim=c(0,3),main="R estimado", xlab="R", ylab="Tiempo" )
     lines(serieRl)
     lines(serieRu)
-    abline(h=1,col="red")
+    ref <- xts(rep(1.0,length(data$R),order.by=time(data$R))
+    lines(ref,col="red")
   })
 
   output$uruguay <- renderInfoBox({
@@ -111,8 +112,8 @@ server <- function(input, output,session) {
     plot(data$R,ylim=c(0,3),,main="R estimado", xlab="R", ylab="Tiempo")
     lines(data$Rl)
     lines(data$Ru)
-    abline(h=1,col="red")
-
+    ref <- xts(rep(1.0,length(data$R),order.by=time(data$R))
+    lines(ref,col="red")
   })
 
   output$result <- renderText({
