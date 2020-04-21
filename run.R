@@ -36,10 +36,10 @@ server <- function(input, output,session) {
   data <- read.csv(file = 'full_data.csv')
   datos_uy <- data[data$location == 'Uruguay',]
   times <- as.Date(datos_uy[,"date"])
-  serie <- xts(datos_uy[,c("new_cases")],order.by=times)
+  serie <- xts(datos_uy[,"new_cases"],order.by=times)
 
-  output$plot_incidence <- renderPlot({
-    plot(serie)
+  output$plot_incidence <- renderPlotly({
+    plot_ly(x = ~times, y = ~serie[,1], type = 'scatter', mode = 'lines')
   })
 
   #estimo el R
@@ -57,13 +57,12 @@ server <- function(input, output,session) {
   serieRl <- xts(res$R[,c("Quantile.0.025(R)")],order.by=times2)
   serieRu <- xts(res$R[,c("Quantile.0.975(R)")],order.by=times2)
 
-  output$plot_estimR <- renderPlot({
-    plot(serieR)
-#    lines(serieRl)
-#    lines(serieRu)
-#    abline(h=1,col="red",lwd=2)
-#    abline(h=0,lwd=2)
+  output$plot_estimR <- renderPlotly({
 
+    fig <- plot_ly(x = ~times2, y = ~serieR[,1], name = 'R0', type = 'scatter', mode = 'lines',width=2)
+    fig <- fig %>% add_trace(y = ~serirRl[,1], name = 'LB', mode = 'lines')
+    fig <- fig %>% add_trace(y = ~serieRu[,1], name = 'UB', mode = 'lines')
+    fig
   })
 
 
