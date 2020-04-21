@@ -59,10 +59,10 @@ server <- function(input, output,session) {
   serieRu <- xts(res$R[,c("Quantile.0.975(R)")],order.by=times2)
 
   output$plot_estimR <- renderPlot({
-    p<-plot(serieR)
-    p<-p %>% lines(serieRl)
-    p<-p %>% lines(serieRu)
-    p
+    plot(serieR)
+    lines(serieRl)
+    lines(serieRu)
+    
   })
 
 
@@ -81,6 +81,7 @@ server <- function(input, output,session) {
   output$plot_incidence_country <- renderPlot({
       plot(actualizar_serie_pais())
   })
+
 
   output$plot_estimR_country <- renderPlot({
     datos_country <- data[data$location == input$pais,]
