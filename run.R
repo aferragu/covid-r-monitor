@@ -2,6 +2,7 @@
 library(shiny)
 library(shinydashboard)
 library(xts)
+library(plotly)
 library(EpiEstim)
 
 options(shiny.host = '0.0.0.0')
