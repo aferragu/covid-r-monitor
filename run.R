@@ -13,7 +13,7 @@ ui <- dashboardPage(
   dashboardSidebar(),
   dashboardBody(
     fluidRow(
-      infoBox("Uruguay")
+      infoBox("uruguay")
     ),
     fluidRow(
       box(title = "Casos registrados", plotOutput("plot_incidence", height = 250)),
@@ -65,6 +65,12 @@ server <- function(input, output,session) {
 
   })
 
+  output$uruguay <- renderInfoBox({
+      infoBox(
+        "R actual Uruguay",
+        tail(res$R[,c("Median(R)")], n=1),
+      )
+  })
 
   output$choose_country <- renderUI({
       selectInput("pais", "Pais", unique(data[,"location"]))
