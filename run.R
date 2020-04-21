@@ -40,7 +40,8 @@ server <- function(input, output,session) {
   serie <- xts(datos_uy[,"new_cases"],order.by=times)
 
   output$plot_incidence <- renderPlotly({
-    plot_ly(x = ~times, y = ~serie[,1], type = 'scatter', mode = 'lines')
+    fig<- plot_ly(x = ~times, y = ~serie[,1], type = 'scatter', mode = 'lines')
+    fig
   })
 
   #estimo el R
@@ -61,17 +62,17 @@ server <- function(input, output,session) {
   output$plot_estimR <- renderPlotly({
 
     fig <- plot_ly(x = ~times2, y = ~serieR[,1], name = 'R0', type = 'scatter', mode = 'lines',width=2)
-    fig <- fig %>% add_trace(y = ~serirRl[,1], name = 'LB', mode = 'lines')
+    fig <- fig %>% add_trace(y = ~serieRl[,1], name = 'LB', mode = 'lines')
     fig <- fig %>% add_trace(y = ~serieRu[,1], name = 'UB', mode = 'lines')
     fig
   })
 
 
   output$choose_country <- renderUI({
-      selectInput("pais", "Pais", unique(data[,"location"], selected="Uruguay"))
+      selectInput("pais", "Pais", unique(data[,"location"]))
   })
 
-  actualizar_pais <- reactive( {
+  actualizar_calculo <- reactive( {
 
       }
     )
