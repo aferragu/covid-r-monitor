@@ -62,7 +62,7 @@ server <- function(input, output,session) {
     plot(serieR,ylim=c(0,3),main="R estimado", xlab="R", ylab="Tiempo" )
     lines(serieRl)
     lines(serieRu)
-    ref <- xts(rep(1.0,length(serieR),order.by=time(serieR))
+    ref <- xts(rep(1.0,length(serieR)),order.by=time(serieR))
     lines(ref,col="red")
   })
 
@@ -112,7 +112,7 @@ server <- function(input, output,session) {
     plot(data$R,ylim=c(0,3),,main="R estimado", xlab="R", ylab="Tiempo")
     lines(data$Rl)
     lines(data$Ru)
-    ref <- xts(rep(1.0,length(data$R),order.by=time(data$R))
+    ref <- xts(rep(1.0,length(data$R)),order.by=time(data$R))
     lines(ref,col="red")
   })
 
