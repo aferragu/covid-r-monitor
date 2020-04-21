@@ -82,7 +82,7 @@ server <- function(input, output,session) {
       plot(actualizar_serie_pais())
   })
 
-  actualizar_serie_pais <- reactive( {
+  actualizar_calculo_pais <- reactive( {
         datos_country <- data[data$location == input$pais,]
         times_country <- as.Date(datos_country[,"date"])
         serie_country <- xts(datos_country[,c("new_cases")],order.by=times_country)
@@ -96,15 +96,15 @@ server <- function(input, output,session) {
         serieRl_country <- xts(res_country$R[,c("Quantile.0.025(R)")],order.by=times2_country)
         serieRu_country <- xts(res_country$R[,c("Quantile.0.975(R)")],order.by=times2_country)
 
-        list("R"=serieR_country,"Rl"=serieRl_country,"Ru"=serieRu_country)
+        list(R=serieR_country,Rl=serieRl_country,Ru=serieRu_country)
       }
     )
 
   output$plot_estimR_country <- renderPlot({
-    data <- actualizar_serie_pais()
-    plot(data["R"])
-    lines(data["Rl"])
-    lines(data["Ru"])
+    data <- actualizar_calculo_pais()
+    plot(data$R)
+    lines(data$Rl)
+    lines(data$Ru)
 
   })
 
