@@ -13,8 +13,8 @@ ui <- dashboardPage(
   dashboardSidebar(collapsed=TRUE),
   dashboardBody(
     fluidRow(
-      infoBoxOutput("uruguay")
-      infoBoxOutput("uruguay_ci_lower")
+      infoBoxOutput("uruguay"),
+      infoBoxOutput("uruguay_ci_lower"),
       infoBoxOutput("uruguay_ci_upper")
     ),
     fluidRow(
