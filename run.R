@@ -71,21 +71,21 @@ server <- function(input, output,session) {
   output$uruguay <- renderInfoBox({
       infoBox(
         "R actual Uruguay",
-        tail(res$R[,c("Median(R)")], n=1),
+        tail(res$R[,c("Median(R)")], n=1)
       )
   })
 
   output$uruguay_ci_lower <- renderInfoBox({
       infoBox(
         "Cuantil 0.025",
-        tail(res$R[,c("Quantile.0.025(R)")], n=1),
+        tail(res$R[,c("Quantile.0.025(R)")], n=1)
       )
   })
 
   output$uruguay_ci_upper <- renderInfoBox({
       infoBox(
         "Cuantil 0.975",
-        tail(res$R[,c("Quantile.0.975(R)")], n=1),
+        tail(res$R[,c("Quantile.0.975(R)")], n=1)
       )
   })
 
