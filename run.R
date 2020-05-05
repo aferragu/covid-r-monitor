@@ -22,6 +22,12 @@ ui <- dashboardPage(
       box(title = "Estimacion de tasa R",plotOutput("plot_estimR", height = 250))
     ),
     fluidRow(
+      box(title = "Sobre la estimación:", HTML("<strong>Metodología: </strong> Documento realizado por E. Mordecki explicando la metodología : <a href='EpiEstim_desarrollo_v1.pdf'>Reporte</a>.<br />"),HTML("<strong>Origen de los datos:</strong> Los datos de Uruguay y otros países son extraídos de <a href='https://covid.ourworldindata.org/'>ourworldindata</a>. Esto puede presentar discrepanacias con datos oficiales de cada país."),status="primary",solidHeader = TRUE,
+collapsible = TRUE),
+      box(title = "Descargar los resultados", downloadLink("downloadData", "Resultados de Estimacion"),status="primary",solidHeader = TRUE,
+collapsible = TRUE),
+    ),
+    fluidRow(
       box(title= "Elegir Pais:", uiOutput("choose_country"))
     ),
     fluidRow(
@@ -67,6 +73,15 @@ server <- function(input, output,session) {
     ref <- xts(rep(1.0,length(serieR)),order.by=time(serieR))
     lines(ref,col="red")
   })
+
+    output$downloadData <- downloadHandler(
+        filename = function() {
+          paste("estimacion_R_Uruguay-", Sys.Date(), ".csv", sep="")
+        },
+        content = function(file) {
+          write.csv(res$R, file)
+        }
+    )
 
   output$uruguay <- renderInfoBox({
       infoBox(
