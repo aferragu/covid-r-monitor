@@ -18,21 +18,26 @@ ui <- dashboardPage(
       infoBoxOutput("uruguay_ci_upper")
     ),
     fluidRow(
-      box(title = "Casos registrados", plotOutput("plot_incidence", height = 250)),
-      box(title = "Estimacion de tasa R",plotOutput("plot_estimR", height = 250))
+      box(title = "Casos registrados", plotOutput("plot_incidence", height = 250),status="primary",solidHeader = TRUE,
+collapsible = TRUE),
+      box(title = "Estimacion de tasa R",plotOutput("plot_estimR", height = 250),status="primary",solidHeader = TRUE,
+collapsible = TRUE)
     ),
     fluidRow(
-      box(title = "Sobre la estimacion:", HTML("<strong>Metodología: </strong> Documento realizado por E. Mordecki explicando la metodología : <a href='EpiEstim_desarrollo_v1.pdf'>Reporte</a>.<br />"),HTML("<strong>Origen de los datos:</strong> Los datos de Uruguay y otros países son extraídos de ourworldindata. Esto puede presentar discrepanacias con datos oficiales de cada país."),status="primary",solidHeader = TRUE,
+      box(title = "Sobre la estimacion:", HTML("<strong>Metodologia: </strong> Documento realizado por E. Mordecki explicando la metodologia : <a href='EpiEstim_desarrollo_v1.pdf'>Reporte</a>.<br />"),HTML("<strong>Origen de los datos:</strong> Los datos de Uruguay y otros países son extraídos de ourworldindata. Esto puede presentar discrepanacias con datos oficiales de cada país."),status="primary",solidHeader = TRUE,
 collapsible = TRUE),
       box(title = "Descargar los resultados", downloadLink("downloadData", "Resultados de estimacion"),status="primary",solidHeader = TRUE,
 collapsible = TRUE)
     ),
     fluidRow(
-      box(title= "Elegir Pais:", uiOutput("choose_country"))
+      box(title= "Elegir Pais:", uiOutput("choose_country"),status="primary",solidHeader = TRUE,
+collapsible = TRUE)
     ),
     fluidRow(
-      box(title = "Casos registrados", plotOutput("plot_incidence_country", height = 250)),
-      box(title = "Estimacion de tasa R",plotOutput("plot_estimR_country", height = 250))
+      box(title = "Casos registrados", plotOutput("plot_incidence_country", height = 250),status="primary",solidHeader = TRUE,
+collapsible = TRUE),
+      box(title = "Estimacion de tasa R",plotOutput("plot_estimR_country", height = 250),status="primary",solidHeader = TRUE,
+collapsible = TRUE)
     )
   )
 )
