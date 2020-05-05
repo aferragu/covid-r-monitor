@@ -40,7 +40,7 @@ server <- function(input, output,session) {
   serie <- xts(datos_uy[,"new_cases"],order.by=times)
 
   output$plot_incidence <- renderPlot({
-    plot(serie,main="Incidencia", xlab="Casos", ylab="Tiempo")
+    barplot(serie,main="Incidencia", ylab="Casos")
   })
 
   #estimo el R
@@ -73,6 +73,14 @@ server <- function(input, output,session) {
       )
   })
 
+  output$uruguay_ci <- renderInfoBox({
+      infoBox(
+        "Intervalo de confianza",
+        tail(res$R[,c("Quantile.0.025(R)")], n=1),
+        tail(res$R[,c("Quantile.0.975(R)")], n=1)
+      )
+  })
+
   output$choose_country <- renderUI({
       selectInput("pais", "Pais", unique(data[,"location"]))
   })
@@ -86,7 +94,7 @@ server <- function(input, output,session) {
     )
 
   output$plot_incidence_country <- renderPlot({
-      plot(actualizar_serie_pais(), main="Incidencia", xlab="Casos", ylab="Tiempo")
+      barplot(actualizar_serie_pais(), main="Incidencia", ylab="Casos")
   })
 
   actualizar_calculo_pais <- reactive( {
