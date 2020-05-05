@@ -14,6 +14,8 @@ ui <- dashboardPage(
   dashboardBody(
     fluidRow(
       infoBoxOutput("uruguay")
+      infoBoxOutput("uruguay_ci_lower")
+      infoBoxOutput("uruguay_ci_upper")
     ),
     fluidRow(
       box(title = "Casos registrados", plotOutput("plot_incidence", height = 250)),
@@ -49,7 +51,7 @@ server <- function(input, output,session) {
   delta_si<-30
   discrete_si_distr <- discr_si(seq(0, delta_si), mean_covid_si, sd_covid_si)
 
-  res <- estimate_R(incid = datos_uy[,"new_cases"],
+  res <- estimate_R(incid = pmax(datos_uy[,"new_cases"],0),
                   method = "non_parametric_si",
                   config = make_config(list(si_distr = discrete_si_distr)))
 
@@ -73,11 +75,17 @@ server <- function(input, output,session) {
       )
   })
 
-  output$uruguay_ci <- renderInfoBox({
+  output$uruguay_ci_lower <- renderInfoBox({
       infoBox(
-        "Intervalo de confianza",
+        "Cuantil 0.025",
         tail(res$R[,c("Quantile.0.025(R)")], n=1),
-        tail(res$R[,c("Quantile.0.975(R)")], n=1)
+      )
+  })
+
+  output$uruguay_ci_upper <- renderInfoBox({
+      infoBox(
+        "Cuantil 0.975",
+        tail(res$R[,c("Quantile.0.975(R)")], n=1),
       )
   })
 
@@ -102,7 +110,7 @@ server <- function(input, output,session) {
         times_country <- as.Date(datos_country[,"date"])
         serie_country <- xts(datos_country[,c("new_cases")],order.by=times_country)
 
-        res_country <- estimate_R(incid = datos_country[,"new_cases"],
+        res_country <- estimate_R(incid = pmax(datos_country[,"new_cases"],0),
                         method = "non_parametric_si",
                         config = make_config(list(si_distr = discrete_si_distr)))
 
