@@ -10,7 +10,7 @@ options(shiny.port = as.numeric(Sys.getenv('PORT')))
 
 ui <- dashboardPage(
   dashboardHeader(title = "COVID R Monitor"),
-  dashboardSidebar(collapsed=TRUE),
+  dashboardSidebar(disabled=TRUE),
   dashboardBody(
     fluidRow(
       infoBoxOutput("uruguay"),
