@@ -128,6 +128,10 @@ server <- function(input, output,session) {
   actualizar_calculo_pais <- reactive( {
         datos_country <- data[data$location == input$pais,]
         times_country <- as.Date(datos_country[,"date"])
+
+        #cambio los NA por 0
+        datos_country[is.na(datos_country[,"new_cases"]),"new_cases"] <- 0
+
         serie_country <- xts(datos_country[,c("new_cases")],order.by=times_country)
 
         res_country <- estimate_R(incid = pmax(datos_country[,"new_cases"],0),
