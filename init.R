@@ -16,7 +16,7 @@
 #  install.packages(packageurl, repos=NULL, type="source")
 #}
 
-my_packages = c("shinydashboard","xts","EpiEstim")
+my_packages = c("shinydashboard","plotly","xts","EpiEstim")
 
 install_if_missing = function(p) {
   if (p %in% rownames(installed.packages()) == FALSE) {
