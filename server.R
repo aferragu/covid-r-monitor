@@ -2,6 +2,7 @@ library(shiny)
 library(shinydashboard)
 library(xts)
 library(EpiEstim)
+library(plotly)
 
 shinyServer(function(input, output, session) {
 
@@ -9,10 +10,19 @@ shinyServer(function(input, output, session) {
       data <- read.csv(file = 'full_data.csv')
       datos_uy <- data[data$location == 'Uruguay',]
       times <- as.Date(datos_uy[,"date"])
-      serie <- xts(datos_uy[,"new_cases"],order.by=times)
+      incidencia <- datos_uy[,"new_cases"]
 
-      output$plot_incidence <- renderPlot({
-        barplot(serie,main="Incidencia", ylab="Casos")
+      datos_incidencia_uy <- data.frame(Tiempo=times,Incidencia=incidencia)
+
+      output$plot_incidence <- renderPlotly({
+        #barplot(serie,main="Incidencia", ylab="Casos")
+        plot_ly(
+            data = datos_incidencia_uy,
+            x = ~Tiempo,
+            y = ~Incidencia,
+            name = "Incidencia diaria",
+            type = "bar"
+          )
       })
 
       #estimo el R
@@ -21,21 +31,61 @@ shinyServer(function(input, output, session) {
       delta_si<-30
       discrete_si_distr <- discr_si(seq(0, delta_si), mean_covid_si, sd_covid_si)
 
-      res <- estimate_R(incid = pmax(datos_uy[,"new_cases"],0),
+      res <- estimate_R(incid = pmax(incidencia,0),
                       method = "non_parametric_si",
                       config = make_config(list(si_distr = discrete_si_distr)))
 
       times2=tail(times,-7)
-      serieR <- xts(res$R[,c("Median(R)")],order.by=times2)
-      serieRl <- xts(res$R[,c("Quantile.0.025(R)")],order.by=times2)
-      serieRu <- xts(res$R[,c("Quantile.0.975(R)")],order.by=times2)
+      datos_R_uy <- data.frame(Tiempo=times2,R=res$R[,c("Median(R)")],Rl=res$R[,"Quantile.0.025(R)"],Ru=res$R[,"Quantile.0.975(R)"])
+#      serieR <- xts(res$R[,c("Median(R)")],order.by=times2)
+#      serieRl <- xts(res$R[,c("Quantile.0.025(R)")],order.by=times2)
+#      serieRu <- xts(res$R[,c("Quantile.0.975(R)")],order.by=times2)
 
-      output$plot_estimR <- renderPlot({
-        plot(serieR,ylim=c(0,3),main="R estimado", xlab="R", ylab="Tiempo" )
-        lines(serieRl)
-        lines(serieRu)
-        ref <- xts(rep(1.0,length(serieR)),order.by=time(serieR))
-        lines(ref,col="red")
+      output$plot_estimR <- renderPlotly({
+
+        fig <- plot_ly(
+                data=datos_R_uy,
+                x = ~Tiempo,
+                y = ~R,
+                type = 'scatter',
+                mode = 'lines',
+                line = list(color='rgb(31, 119, 180)'),
+                name = 'R estimado')
+        fig <- fig %>% add_trace(
+                    x = ~Tiempo,
+                    y = ~Ru,
+                    type = 'scatter',
+                    mode = 'lines',
+                    line = list(color = 'transparent'),
+                    showlegend = FALSE,
+                    hoverinfo='skip',
+                    name = 'Limite superior')
+        fig <- fig %>% add_trace(
+            y = ~Rl,
+            type = 'scatter',
+            mode = 'lines',
+            fill = 'tonexty',
+            fillcolor='rgba(31, 119, 180,0.2)',
+            line = list(color = 'transparent'),
+            showlegend = FALSE,
+            hoverinfo='skip',
+            name = 'Limite inferior')
+
+
+
+        fig <- fig %>% add_trace(
+                y = rep(1,length(times2)),
+                type = 'scatter',
+                mode = 'lines',
+                showlegend = FALSE,
+                line = list(color='rgb(127,0,0)',width=1,dash="dash"),
+                hoverinfo='skip',
+                name = 'Referencia')
+
+        fig <- fig %>% layout(
+            title = "R estimado",
+            yaxis = list(title="R",range=c(0,3.5),hoverformat = '.2f')
+        )
       })
 
         output$downloadData <- downloadHandler(

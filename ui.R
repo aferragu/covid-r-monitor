@@ -1,5 +1,6 @@
 library(shiny)
 library(shinydashboard)
+library(plotly)
 
 shinyUI(
 
@@ -13,9 +14,9 @@ shinyUI(
           infoBoxOutput("uruguay_ci_upper")
         ),
         fluidRow(
-          box(title = "Casos registrados", plotOutput("plot_incidence", height = 250),status="primary",solidHeader = TRUE,
+          box(title = "Casos registrados", plotlyOutput("plot_incidence", height = 250),status="primary",solidHeader = TRUE,
     collapsible = TRUE),
-          box(title = "Estimacion de tasa R",plotOutput("plot_estimR", height = 250),status="primary",solidHeader = TRUE,
+          box(title = "Estimacion de tasa R",plotlyOutput("plot_estimR", height = 250),status="primary",solidHeader = TRUE,
     collapsible = TRUE)
         ),
         fluidRow(
