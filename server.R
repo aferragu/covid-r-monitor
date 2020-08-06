@@ -1,6 +1,5 @@
 library(shiny)
 library(shinydashboard)
-library(xts)
 library(EpiEstim)
 library(plotly)
 
