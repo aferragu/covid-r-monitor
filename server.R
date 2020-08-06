@@ -62,24 +62,24 @@ shinyServer(function(input, output, session) {
                 line = list(color='rgb(31, 119, 180)'),
                 name = 'R estimado')
         fig <- fig %>% add_trace(
-                    x = ~Tiempo,
-                    y = ~Ru,
-                    type = 'scatter',
-                    mode = 'lines',
-                    line = list(color = 'transparent'),
-                    showlegend = FALSE,
-                    hoverinfo='skip',
-                    name = 'Limite superior')
+                x = ~Tiempo,
+                y = ~Ru,
+                type = 'scatter',
+                mode = 'lines',
+                line = list(color = 'transparent'),
+                showlegend = FALSE,
+                hoverinfo='skip',
+                name = 'Limite superior')
         fig <- fig %>% add_trace(
-            y = ~Rl,
-            type = 'scatter',
-            mode = 'lines',
-            fill = 'tonexty',
-            fillcolor='rgba(31, 119, 180,0.2)',
-            line = list(color = 'transparent'),
-            showlegend = FALSE,
-            hoverinfo='skip',
-            name = 'Limite inferior')
+                y = ~Rl,
+                type = 'scatter',
+                mode = 'lines',
+                fill = 'tonexty',
+                fillcolor='rgba(31, 119, 180,0.2)',
+                line = list(color = 'transparent'),
+                showlegend = FALSE,
+                hoverinfo='skip',
+                name = 'Limite inferior')
         fig <- fig %>% add_trace(
                 y = rep(1,n),
                 type = 'scatter',
@@ -88,10 +88,9 @@ shinyServer(function(input, output, session) {
                 line = list(color='rgb(127,0,0)',width=1,dash="dash"),
                 hoverinfo='skip',
                 name = 'Referencia')
-
         fig <- fig %>% layout(
-            title = "R estimado",
-            yaxis = list(title="R",range=c(0,3.5),hoverformat = '.2f')
+                title = "R estimado",
+                yaxis = list(title="R",range=c(0,3.5),hoverformat = '.2f')
         )
         return(fig)
     }
@@ -141,7 +140,7 @@ shinyServer(function(input, output, session) {
     output$uruguay_ci_upper <- renderInfoBox({
         infoBox(
           "Cuantil 0.975",
-          tail(datos_R_uy$R, n=1)
+          tail(datos_R_uy$Ru, n=1)
         )
     })
 
