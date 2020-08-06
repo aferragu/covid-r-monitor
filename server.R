@@ -27,6 +27,7 @@ shinyServer(function(input, output, session) {
     estimate_R_country <- function(datos,window=7,mean_covid_si=3.95,sd_covid_si=4.75,delta_si=30) {
 
         discrete_si_distr <- discr_si(seq(0, delta_si), mean_covid_si, sd_covid_si)
+        datos[is.na(datos[,"Incidencia"]),"Incidencia"] <- 0
         res <- estimate_R(incid = pmax(datos$Incidencia,0),
                         method = "non_parametric_si",
                         config = make_config(list(si_distr = discrete_si_distr)))
@@ -92,6 +93,7 @@ shinyServer(function(input, output, session) {
             title = "R estimado",
             yaxis = list(title="R",range=c(0,3.5),hoverformat = '.2f')
         )
+        return(fig)
     }
 
 
@@ -107,7 +109,52 @@ shinyServer(function(input, output, session) {
       plotly_incidence(datos_incidencia_uy)
     })
 
+    datos_R_uy <- estimate_R_country(datos_incidencia_uy)
 
+    output$plot_estimR <- renderPlotly({
+        plotly_R(datos_R_uy)
+    })
 
+    output$downloadData <- downloadHandler(
+        filename = function() {
+          paste("estimacion_R_Uruguay-", Sys.Date(), ".csv", sep="")
+        },
+        content = function(file) {
+          write.csv(datos_R_uy, file)
+        }
+    )
 
-}
+    output$uruguay <- renderInfoBox({
+        infoBox(
+          "R actual Uruguay",
+          tail(datos_R_uy$R, n=1)
+        )
+    })
+
+    output$uruguay_ci_lower <- renderInfoBox({
+        infoBox(
+          "Cuantil 0.025",
+          tail(datos_R_uy$Rl, n=1)
+        )
+    })
+
+    output$uruguay_ci_upper <- renderInfoBox({
+        infoBox(
+          "Cuantil 0.975",
+          tail(datos_R_uy$R, n=1)
+        )
+    })
+
+    output$choose_country <- renderUI({
+        selectInput("pais", "Pais", unique(data[,"location"]))
+    })
+
+    output$plot_incidence_country <- renderPlotly({
+        plotly_incidence(filter_data(data,input$pais))
+    })
+
+    output$plot_estimR_country <- renderPlotly({
+        plotly_R(estimate_R_country(filter_data(data,input$pais)))
+    })
+
+})
