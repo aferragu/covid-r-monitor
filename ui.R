@@ -30,9 +30,9 @@ shinyUI(
     collapsible = TRUE)
         ),
         fluidRow(
-          box(title = "Casos registrados", plotOutput("plot_incidence_country", height = 250),status="primary",solidHeader = TRUE,
+          box(title = "Casos registrados", plotlyOutput("plot_incidence_country", height = 250),status="primary",solidHeader = TRUE,
     collapsible = TRUE),
-          box(title = "Estimacion de tasa R",plotOutput("plot_estimR_country", height = 250),status="primary",solidHeader = TRUE,
+          box(title = "Estimacion de tasa R",plotlyOutput("plot_estimR_country", height = 250),status="primary",solidHeader = TRUE,
     collapsible = TRUE)
         ),
         tags$footer(HTML("Desarrollado por Andres Ferragut (Univ. ORT Uruguay) y Ernesto Mordecki (CMAT, UdelaR) en base a la biblioteca EpiEstim. Contacto: <a href='mailto:ferragut@ort.edu.uy'>ferragut@ort.edu.uy</a>. <a href='https://github.com/aferragu/covid-r-monitor'>Codigo</a>"))
