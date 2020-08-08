@@ -29,9 +29,15 @@ shinyServer(function(input, output, session) {
 
         discrete_si_distr <- discr_si(seq(0, delta_si), mean_covid_si, sd_covid_si)
         datos[is.na(datos[,"Incidencia"]),"Incidencia"] <- 0
+
+        #vectores auxiliares para cambiar la ventana
+        tt<-nrow(datos)
+        t_start <- seq(2, tt-window+1)
+        t_end <- t_start + window-1
+
         res <- estimate_R(incid = pmax(datos$Incidencia,0),
                         method = "non_parametric_si",
-                        config = make_config(list(si_distr = discrete_si_distr)))
+                        config = make_config(list(si_distr = discrete_si_distr,t_start=t_start,t_end=t_end)))
 
         shortened_times <- tail(datos$Tiempo,-window)
         datos_R_country <- data.frame(Tiempo=shortened_times,R=res$R[,c("Median(R)")],Rl=res$R[,"Quantile.0.025(R)"],Ru=res$R[,"Quantile.0.975(R)"])
