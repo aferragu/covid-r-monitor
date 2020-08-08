@@ -14,12 +14,13 @@ shinyServer(function(input, output, session) {
         return(data)
     }
 
-    #Filter Time and Incidence data for a given country
-    filter_data <- function(data,country) {
+    #Filter Time and Incidence data for a given country. Also provides a moving average of window W
+    filter_data <- function(data,country, W=7) {
         datos_country <- data[data$location == country,]
         times <- as.Date(datos_country[,"date"])
         incidencia <- datos_country[,c("new_cases")]
-        datos_incidencia_country <- data.frame(Tiempo=times,Incidencia=incidencia)
+        incidencia_ma <- stats::filter(incidencia, rep(1/W,W),sides=1)
+        datos_incidencia_country <- data.frame(Tiempo=times,Incidencia=incidencia,MediaMovil=incidencia_ma)
         return(datos_incidencia_country)
     }
 
@@ -46,6 +47,14 @@ shinyServer(function(input, output, session) {
             name = "Nuevos casos diarios",
             type = "bar"
           )
+          fig <- fig %>% add_trace(
+              x = ~Tiempo,
+              y = ~MediaMovil,
+              type = 'scatter',
+              mode = 'lines',
+              line = list(color = 'rgba(119, 31, 180,0.5)'),
+              showlegend = FALSE,
+              name = 'Media móvil')
           return(fig)
     }
 
