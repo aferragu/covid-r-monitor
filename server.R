@@ -171,4 +171,11 @@ shinyServer(function(input, output, session) {
         plotly_R(estimate_R_country(filter_data(data,input$pais)))
     })
 
+    ### Auxiliary function to avoid timeouts
+    autoInvalidate <- reactiveTimer(10000)
+    observe({
+        autoInvalidate()
+        cat(".")
+    })
+
 })
