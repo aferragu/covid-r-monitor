@@ -159,16 +159,30 @@ shinyServer(function(input, output, session) {
         )
     })
 
-    output$choose_country <- renderUI({
-        selectInput("pais", "Pais", unique(data[,"location"]))
+    ##Get country data
+
+    output$choose_country_1 <- renderUI({
+        selectInput("pais1", NULL, unique(data[,"location"]), selected="Uruguay")
     })
 
-    output$plot_incidence_country <- renderPlotly({
-        plotly_incidence(filter_data(data,input$pais))
+    output$choose_country_2 <- renderUI({
+        selectInput("pais2", NULL, unique(data[,"location"]))
     })
 
-    output$plot_estimR_country <- renderPlotly({
-        plotly_R(estimate_R_country(filter_data(data,input$pais)))
+    output$plot_incidence_country_1 <- renderPlotly({
+        plotly_incidence(filter_data(data,input$pais1,input$window_ma))
+    })
+
+    output$plot_estimR_country_1 <- renderPlotly({
+        plotly_R(estimate_R_country(filter_data(data,input$pais1),window=input$window_R,mean_covid_si=input$mean_covid_si,sd_covid_si=input$sd_covid_si))
+    })
+
+    output$plot_incidence_country_2 <- renderPlotly({
+        plotly_incidence(filter_data(data,input$pais2,input$window_ma))
+    })
+
+    output$plot_estimR_country_2 <- renderPlotly({
+        plotly_R(estimate_R_country(filter_data(data,input$pais2),window=input$window_R,mean_covid_si=input$mean_covid_si,sd_covid_si=input$sd_covid_si))
     })
 
     ### Auxiliary function to avoid timeouts
