@@ -2,6 +2,9 @@ library(shiny)
 library(shinydashboard)
 library(plotly)
 
+status1 <- "primary"
+status2 <- "info"
+
 shinyUI(
 
     dashboardPage(
@@ -47,21 +50,21 @@ shinyUI(
                 ),
                 tabItem(tabName="comparativas",
                     fluidRow(
-                      box(title= "Elegir Pais 1:", uiOutput("choose_country_1"),status="primary",solidHeader = TRUE,
+                      box(title= "Elegir Pais 1:", uiOutput("choose_country_1"),status=status1,solidHeader = TRUE,
                       collapsible = TRUE),
-                      box(title= "Elegir Pais 2:", uiOutput("choose_country_2"),status="primary",solidHeader = TRUE,
+                      box(title= "Elegir Pais 2:", uiOutput("choose_country_2"),status=status2,solidHeader = TRUE,
                       collapsible = TRUE)
                     ),
                     fluidRow(
-                      box(title = "Casos registrados", plotlyOutput("plot_incidence_country_1", height = 300),status="primary",solidHeader = TRUE,
+                      box(title = "Casos registrados", plotlyOutput("plot_incidence_country_1", height = 300),status=status1,solidHeader = TRUE,
                       collapsible = TRUE),
-                      box(title = "Casos registrados", plotlyOutput("plot_incidence_country_2", height = 300),status="primary",solidHeader = TRUE,
+                      box(title = "Casos registrados", plotlyOutput("plot_incidence_country_2", height = 300),status=status2,solidHeader = TRUE,
                       collapsible = TRUE)
                     ),
                     fluidRow(
-                      box(title = "Estimacion de tasa R",plotlyOutput("plot_estimR_country_1", height = 300),status="primary",solidHeader = TRUE,
+                      box(title = "Estimacion de tasa R",plotlyOutput("plot_estimR_country_1", height = 300),status=status1,solidHeader = TRUE,
                       collapsible = TRUE),
-                      box(title = "Estimacion de tasa R",plotlyOutput("plot_estimR_country_2", height = 300),status="primary",solidHeader = TRUE,
+                      box(title = "Estimacion de tasa R",plotlyOutput("plot_estimR_country_2", height = 300),status=status2,solidHeader = TRUE,
                       collapsible = TRUE)
                     ),
                 )
