@@ -116,17 +116,17 @@ shinyServer(function(input, output, session) {
     #Download data
     data <- get_data()
 
+
     #Filter Uruguay
-    datos_incidencia_uy <- filter_data(data,"Uruguay")
+    datos_incidencia_uy <- reactive(filter_data(data,"Uruguay",input$window_ma))
+    datos_R_uy <- reactive(estimate_R_country(datos_incidencia_uy(), window=input$window_R,mean_covid_si=input$mean_covid_si,sd_covid_si=input$sd_covid_si))
 
     output$plot_incidence <- renderPlotly({
-      plotly_incidence(datos_incidencia_uy)
+      plotly_incidence(datos_incidencia_uy())
     })
 
-    datos_R_uy <- estimate_R_country(datos_incidencia_uy)
-
     output$plot_estimR <- renderPlotly({
-        plotly_R(datos_R_uy)
+        plotly_R(datos_R_uy())
     })
 
     output$downloadData <- downloadHandler(
@@ -141,21 +141,21 @@ shinyServer(function(input, output, session) {
     output$uruguay <- renderInfoBox({
         infoBox(
           "R actual Uruguay",
-          tail(datos_R_uy$R, n=1)
+          tail(datos_R_uy()$R, n=1)
         )
     })
 
     output$uruguay_ci_lower <- renderInfoBox({
         infoBox(
           "Cuantil 0.025",
-          tail(datos_R_uy$Rl, n=1)
+          tail(datos_R_uy()$Rl, n=1)
         )
     })
 
     output$uruguay_ci_upper <- renderInfoBox({
         infoBox(
           "Cuantil 0.975",
-          tail(datos_R_uy$Ru, n=1)
+          tail(datos_R_uy()$Ru, n=1)
         )
     })
 
