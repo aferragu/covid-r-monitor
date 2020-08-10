@@ -16,11 +16,18 @@ shinyUI(
               menuItem("Uruguay", tabName = "uruguay", icon = icon("dashboard")),
               menuItem("Comparativas", tabName = "comparativas", icon = icon("dashboard")),
               menuItem("Parámetros de Estimación",
-                      sliderInput("window_R", "Ventana estimacion R", 1, 14, 7, step = 1),
-                      sliderInput("window_ma", "Ventana suavizado", 2, 14, 7, step = 1),
-
-                      numericInput("mean_covid_si", "Media SI", 3.95, min = 0, max = 15, step = 0.2),
-                      numericInput("sd_covid_si", "Desvio SI", 4.75, min = 0, max = 15, step = 0.25)
+                      tags$div(title="Tamaño de la ventana (días) para estimar el R",
+                        sliderInput("window_R", "Ventana estimacion R", 1, 14, 7, step = 1)
+                      ),
+                      tags$div(title="Tamaño de la ventana (días) para promediar los casos diarios",
+                        sliderInput("window_ma", "Ventana suavizado", 2, 14, 7, step = 1)
+                      ),
+                      tags$div(title="Duración media del intervalo de contagio",
+                        numericInput("mean_covid_si", "Media SI", 3.95, min = 0, max = 15, step = 0.2)
+                      ),
+                      tags$div(title="Desvío estándar del intervalo de contagio",
+                        numericInput("sd_covid_si", "Desvio SI", 4.75, min = 0, max = 15, step = 0.25)
+                      )
                     )
           )
       ),
