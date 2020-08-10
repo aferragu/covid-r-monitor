@@ -9,4 +9,5 @@ RUN /usr/bin/R --no-init-file --no-save --quiet --slave -f /app/init.R
 ENV PORT=8080
 
 COPY server.R run.R ui.R /app/
+COPY www/logogach.png /app/www/
 CMD ["/usr/bin/R", "--no-save", "--gui-none", "-f /app/run.R"]

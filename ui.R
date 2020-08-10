@@ -8,7 +8,9 @@ status2 <- "info"
 shinyUI(
 
     dashboardPage(
-      dashboardHeader(title = "COVID R Monitor"),
+      dashboardHeader(title = "COVID R Monitor",
+                      tags$li(tags$img(src="logogach.png",height="50px"),class="dropdown")
+      ),
 
       dashboardSidebar(collapsed=FALSE,
 
