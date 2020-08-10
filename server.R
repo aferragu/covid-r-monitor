@@ -134,7 +134,7 @@ shinyServer(function(input, output, session) {
           paste("estimacion_R_Uruguay-", Sys.Date(), ".csv", sep="")
         },
         content = function(file) {
-          write.csv(datos_R_uy, file)
+          write.csv(datos_R_uy(), file)
         }
     )
 
