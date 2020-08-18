@@ -14,6 +14,13 @@ shinyServer(function(input, output, session) {
         return(data)
     }
 
+    #Get complete data_frame from GUIAD
+    get_data_guiad <- function(location="https://raw.githubusercontent.com/GUIAD-COVID/datos-y-visualizaciones-GUIAD/master/datos/estadisticasUY.csv") {
+        download.file(location, "estadisticasUY.csv")
+        data <- read.csv(file = 'estadisticasUY.csv',na="N/A")
+        return(data)
+    }
+
     #Filter Time and Incidence data for a given country. Also provides a moving average of window W
     filter_data <- function(data,country, W=7) {
         datos_country <- data[data$location == country,]
@@ -42,6 +49,17 @@ shinyServer(function(input, output, session) {
         shortened_times <- tail(datos$Tiempo,-window)
         datos_R_country <- data.frame(Tiempo=shortened_times,R=res$R[,c("Median(R)")],Rl=res$R[,"Quantile.0.025(R)"],Ru=res$R[,"Quantile.0.975(R)"])
         return(datos_R_country)
+    }
+
+    #Process GUIAD data to get active cases and positive test ratio
+    process_data_guiad <- function(datos, W=7) {
+
+        fecha <- as.Date(datos[,"fecha"],format="%d/%m/%Y")
+        activos <- datos[,"cantPersonasConInfeccionEnCurso"]
+        ratio_test <- as.numeric(datos[,"cantTestPositivos"])/as.numeric(datos[,"cantTest"])*100
+        ratio_test_ma <- stats::filter(ratio_test, rep(1/W,W),sides=1)
+        return(data.frame(Tiempo = fecha, Activos = activos, RatioTest = ratio_test, RatioTestMA = ratio_test_ma))
+
     }
 
     #Create Plotly Barplot for incidence
@@ -110,12 +128,46 @@ shinyServer(function(input, output, session) {
         return(fig)
     }
 
+    #Create Plotly for active cases
+    plotly_active <- function(datos) {
+        fig<- plot_ly(
+            data = datos,
+            x = ~Tiempo,
+            y = ~Activos,
+            name = "Cant. de casos activos",
+            type = "scatter",
+            mode = "lines"
+          )
+          return(fig)
+    }
+
+    #Create Plotly for test ratio
+    plotly_test_ratio <- function(datos) {
+        fig<- plot_ly(
+            data = datos,
+            x = ~Tiempo,
+            y = ~RatioTest,
+            name = "Cant. de casos activos",
+            type = "scatter",
+            mode = "lines"
+          )
+          fig <- fig %>% add_trace(
+              x = ~Tiempo,
+              y = ~RatioTestMA,
+              type = 'scatter',
+              mode = 'lines',
+              line = list(color = 'rgba(119, 31, 180,0.5)'),
+              showlegend = FALSE,
+              name = 'Media móvil')
+          return(fig)
+    }
+
 
     ######Main logic and rendering functions
 
     #Download data
     data <- get_data()
-
+    data_guiad <- process_data_guiad(get_data_guiad())
 
     #Filter Uruguay
     datos_incidencia_uy <- reactive(filter_data(data,"Uruguay",input$window_ma))
@@ -127,6 +179,14 @@ shinyServer(function(input, output, session) {
 
     output$plot_estimR <- renderPlotly({
         plotly_R(datos_R_uy())
+    })
+
+    output$plot_active <- renderPlotly({
+      plotly_active(data_guiad)
+    })
+
+    output$plot_test_ratio <- renderPlotly({
+        plotly_test_ratio(data_guiad)
     })
 
     output$downloadData <- downloadHandler(
