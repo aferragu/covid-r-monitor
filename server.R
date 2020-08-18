@@ -159,6 +159,7 @@ shinyServer(function(input, output, session) {
               line = list(color = 'rgba(119, 31, 180,0.5)'),
               showlegend = FALSE,
               name = 'Media móvil')
+          fig <- fig %>% layout(yaxis = list(title = "Porcentaje de test positivos"))
           return(fig)
     }
 
@@ -167,7 +168,7 @@ shinyServer(function(input, output, session) {
 
     #Download data
     data <- get_data()
-    data_guiad <- process_data_guiad(get_data_guiad())
+    data_guiad <- reactive(process_data_guiad(get_data_guiad(),W=input$window_ma))
 
     #Filter Uruguay
     datos_incidencia_uy <- reactive(filter_data(data,"Uruguay",input$window_ma))
@@ -182,11 +183,11 @@ shinyServer(function(input, output, session) {
     })
 
     output$plot_active <- renderPlotly({
-      plotly_active(data_guiad)
+      plotly_active(data_guiad())
     })
 
     output$plot_test_ratio <- renderPlotly({
-        plotly_test_ratio(data_guiad)
+        plotly_test_ratio(data_guiad())
     })
 
     output$downloadData <- downloadHandler(

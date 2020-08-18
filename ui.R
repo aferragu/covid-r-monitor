@@ -59,7 +59,7 @@ shinyUI(
                     fluidRow(
                       box(title = "Sobre la estimación:", HTML("<strong>Metodologia: </strong> Documento realizado por E. Mordecki explicando la metodologia : <a href='http://www.cmat.edu.uy/~mordecki/EpiEstim_reporte.pdf'>Reporte</a>.<br />"),HTML("<strong>Origen de los datos:</strong> Los datos de incidencia de Uruguay y otros países son extraídos de <a href='https://ourworldindata.org/coronavirus-source-data'>ourworldindata</a>. Esto puede presentar discrepanacias con datos oficiales de cada pais. Los datos de casos activos de Uruguay y ratio de test positivos son tomados del <a href='https://guiad-covid.github.io/data/'>repositorio de datos del GUIAD</a>, que publica como datos abiertos los datos del SINAE-UY."),status="primary",solidHeader = TRUE,
                 collapsible = TRUE),
-                      box(title = "Descargar los resultados", downloadLink("downloadData", "Resultados de estimacion"),status="primary",solidHeader = TRUE,
+                      box(title = "Descargar los resultados", downloadLink("downloadData", "Resultados de estimacion del R"),status="primary",solidHeader = TRUE,
                 collapsible = TRUE)
                     ),
                 ),
