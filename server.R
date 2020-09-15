@@ -52,13 +52,15 @@ shinyServer(function(input, output, session) {
     }
 
     #Process GUIAD data to get active cases and positive test ratio
-    process_data_guiad <- function(datos, W=7) {
+    process_data_guiad <- function(datos, W=7, W2=3) {
 
         fecha <- as.Date(datos[,"fecha"],format="%d/%m/%Y")
         activos <- datos[,"cantPersonasConInfeccionEnCurso"]
         ratio_test <- as.numeric(datos[,"cantTestPositivos"])/as.numeric(datos[,"cantTest"])*100
-        ratio_test_ma <- stats::filter(ratio_test, rep(1/W,W),sides=1)
-        return(data.frame(Tiempo = fecha, Activos = activos, RatioTest = ratio_test, RatioTestMA = ratio_test_ma))
+        ratio_test_suavizado_num <- stats::filter(as.numeric(datos[,"cantTestPositivos"]), rep(1,W2), sides=1)
+        ratio_test_suavizado_den <- stats::filter(as.numeric(datos[,"cantTest"]), rep(1,W2), sides=1)
+        ratio_test_suavizado <- ratio_test_suavizado_num/ratio_test_suavizado_den*100
+        return(data.frame(Tiempo = fecha, Activos = activos, RatioTest = ratio_test, RatioTestSuavizado = ratio_test_suavizado))
 
     }
 
@@ -153,7 +155,7 @@ shinyServer(function(input, output, session) {
           )
           fig <- fig %>% add_trace(
               x = ~Tiempo,
-              y = ~RatioTestMA,
+              y = ~RatioTestSuavizado,
               type = 'scatter',
               mode = 'lines',
               line = list(color = 'rgba(119, 31, 180,0.5)'),
@@ -168,7 +170,7 @@ shinyServer(function(input, output, session) {
 
     #Download data
     data <- get_data()
-    data_guiad <- reactive(process_data_guiad(get_data_guiad(),W=input$window_ma))
+    data_guiad <- reactive(process_data_guiad(get_data_guiad(),W=input$window_ma,W2=input$window_ratio))
 
     #Filter Uruguay
     datos_incidencia_uy <- reactive(filter_data(data,"Uruguay",input$window_ma))

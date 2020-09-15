@@ -24,6 +24,9 @@ shinyUI(
                       tags$div(title="Tamaño de la ventana (días) para promediar los casos diarios",
                         sliderInput("window_ma", "Ventana suavizado", 2, 14, 7, step = 1)
                       ),
+                      tags$div(title="Tamaño de la ventana (días) para suavizar ratio de test",
+                        sliderInput("window_ratio", "Ventana acumulacion ratio", 1, 7, 3, step = 1)
+                      ),
                       tags$div(title="Duración media del intervalo de contagio",
                         numericInput("mean_covid_si", "Media SI", 3.95, min = 0, max = 15, step = 0.2)
                       ),
