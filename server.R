@@ -55,12 +55,14 @@ shinyServer(function(input, output, session) {
     process_data_guiad <- function(datos, W=7, W2=3) {
 
         fecha <- as.Date(datos[,"fecha"],format="%d/%m/%Y")
+        incidencia <- datos[,"cantCasosNuevos"]
+        incidencia_ma <- stats::filter(as.numeric(incidencia), rep(1,W)/W, sides=1)
         activos <- datos[,"cantPersonasConInfeccionEnCurso"]
         ratio_test <- as.numeric(datos[,"cantTestPositivos"])/as.numeric(datos[,"cantTest"])*100
         ratio_test_suavizado_num <- stats::filter(as.numeric(datos[,"cantTestPositivos"]), rep(1,W2), sides=1)
         ratio_test_suavizado_den <- stats::filter(as.numeric(datos[,"cantTest"]), rep(1,W2), sides=1)
         ratio_test_suavizado <- ratio_test_suavizado_num/ratio_test_suavizado_den*100
-        return(data.frame(Tiempo = fecha, Activos = activos, RatioTest = ratio_test, RatioTestSuavizado = ratio_test_suavizado))
+        return(data.frame(Tiempo = fecha, Incidencia = incidencia, MediaMovil = incidencia_ma, Activos = activos, RatioTest = ratio_test, RatioTestSuavizado = ratio_test_suavizado))
 
     }
 
@@ -173,7 +175,7 @@ shinyServer(function(input, output, session) {
     data_guiad <- reactive(process_data_guiad(get_data_guiad(),W=input$window_ma,W2=input$window_ratio))
 
     #Filter Uruguay
-    datos_incidencia_uy <- reactive(filter_data(data,"Uruguay",input$window_ma))
+    datos_incidencia_uy <- reactive(data_guiad())
     datos_R_uy <- reactive(estimate_R_country(datos_incidencia_uy(), window=input$window_R,mean_covid_si=input$mean_covid_si,sd_covid_si=input$sd_covid_si))
 
     output$plot_incidence <- renderPlotly({
