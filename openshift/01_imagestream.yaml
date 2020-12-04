@@ -1,8 +1,0 @@
-apiVersion: v1
-kind: ImageStream
-metadata:
-  name: covid-monitor
-  labels:
-    app: covid-monitor
-spec:
-  dockerImageRepository:
