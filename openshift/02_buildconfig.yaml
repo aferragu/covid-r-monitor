@@ -22,4 +22,5 @@ spec:
     type: Git
   strategy:
     dockerStrategy:
+      dockerfilePath: Dockerfile-OCP
     type: Docker
