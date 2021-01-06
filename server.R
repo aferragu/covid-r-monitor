@@ -58,8 +58,8 @@ shinyServer(function(input, output, session) {
         incidencia <- datos[,"cantCasosNuevos"]
         incidencia_ma <- stats::filter(as.numeric(incidencia), rep(1,W)/W, sides=1)
         activos <- datos[,"cantPersonasConInfeccionEnCurso"]
-        ratio_test <- as.numeric(datos[,"cantTestPositivos"])/as.numeric(datos[,"cantTest"])*100
-        ratio_test_suavizado_num <- stats::filter(as.numeric(datos[,"cantTestPositivos"]), rep(1,W2), sides=1)
+        ratio_test <- as.numeric(datos[,"cantCasosNuevos"])/as.numeric(datos[,"cantTest"])*100
+        ratio_test_suavizado_num <- stats::filter(as.numeric(datos[,"cantCasosNuevos"]), rep(1,W2), sides=1)
         ratio_test_suavizado_den <- stats::filter(as.numeric(datos[,"cantTest"]), rep(1,W2), sides=1)
         ratio_test_suavizado <- ratio_test_suavizado_num/ratio_test_suavizado_den*100
         return(data.frame(Tiempo = fecha, Incidencia = incidencia, MediaMovil = incidencia_ma, Activos = activos, RatioTest = ratio_test, RatioTestSuavizado = ratio_test_suavizado))
