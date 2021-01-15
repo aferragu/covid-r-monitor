@@ -8,7 +8,7 @@ shinyServer(function(input, output, session) {
     #####Auxiliary functions
 
     #Get complete data_frame from server
-    get_data <- function(location="https://covid.ourworldindata.org/data/ecdc/full_data.csv") {
+    get_data <- function(location="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/jhu/full_data.csv") {
         download.file(location, "full_data.csv")
         data <- read.csv(file = 'full_data.csv')
         return(data)
