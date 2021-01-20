@@ -235,19 +235,27 @@ shinyServer(function(input, output, session) {
     })
 
     output$plot_incidence_country_1 <- renderPlotly({
-        plotly_incidence(filter_data(data,input$pais1,input$window_ma))
+        plotly_incidence(filter_data(data,input$pais1,input$window_ma))  %>% layout(
+            xaxis = list(range = input$CommonDates)
+        )
     })
 
     output$plot_estimR_country_1 <- renderPlotly({
-        plotly_R(estimate_R_country(filter_data(data,input$pais1),window=input$window_R,mean_covid_si=input$mean_covid_si,sd_covid_si=input$sd_covid_si))
+        plotly_R(estimate_R_country(filter_data(data,input$pais1),window=input$window_R,mean_covid_si=input$mean_covid_si,sd_covid_si=input$sd_covid_si)) %>% layout(
+            xaxis = list(range = input$CommonDates)
+        )
     })
 
     output$plot_incidence_country_2 <- renderPlotly({
-        plotly_incidence(filter_data(data,input$pais2,input$window_ma))
+        plotly_incidence(filter_data(data,input$pais2,input$window_ma)) %>% layout(
+            xaxis = list(range = input$CommonDates)
+        )
     })
 
     output$plot_estimR_country_2 <- renderPlotly({
-        plotly_R(estimate_R_country(filter_data(data,input$pais2),window=input$window_R,mean_covid_si=input$mean_covid_si,sd_covid_si=input$sd_covid_si))
+        plotly_R(estimate_R_country(filter_data(data,input$pais2),window=input$window_R,mean_covid_si=input$mean_covid_si,sd_covid_si=input$sd_covid_si)) %>% layout(
+            xaxis = list(range = input$CommonDates)
+        )
     })
 
     ### Auxiliary function to avoid timeouts

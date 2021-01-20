@@ -74,6 +74,18 @@ shinyUI(
                       collapsible = TRUE)
                     ),
                     fluidRow(
+                      div(style = "margin: auto; width: 80%",
+                      sliderInput("CommonDates",
+                          label="Rango temporal:",
+                          min = as.Date("2019-12-01","%Y-%m-%d"),
+                          max = Sys.Date(),
+                          value=c(as.Date("2019-12-01","%Y-%m-%d"),Sys.Date()),
+                          timeFormat="%Y-%m-%d",
+                          width="100%",
+                          step = 1)
+                        )
+                    ),
+                    fluidRow(
                       box(title = "Casos registrados", plotlyOutput("plot_incidence_country_1", height = 300),status=status1,solidHeader = TRUE,
                       collapsible = TRUE),
                       box(title = "Casos registrados", plotlyOutput("plot_incidence_country_2", height = 300),status=status2,solidHeader = TRUE,
