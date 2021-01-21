@@ -103,13 +103,15 @@ shinyServer(function(input, output, session) {
 
     #Create Plotly Barplot for StringencyIndex
     plotly_stringency <- function(datos) {
-        fig<- plot_ly(
+        fig <- plot_ly(
             data = datos,
             x = ~Tiempo,
             y = ~StringencyIndex,
             name = "Oxford Stringency Index",
-            type = "bar"
+            type = "scatter",
+            mode = "lines"
           )
+          fig <- fig %>% layout(yaxis = list(range = c(0, 100)))
           return(fig)
     }
 
