@@ -6,7 +6,7 @@ library(plotly)
 shinyServer(function(input, output, session) {
 
     #####Auxiliary functions
-    
+
     #Get complete data_frame from server
     get_data <- function(location="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/jhu/full_data.csv") {
         download.file(location, "full_data.csv")
@@ -21,6 +21,12 @@ shinyServer(function(input, output, session) {
         return(data)
     }
 
+    get_stringency_data <- function(location="https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_latest.csv") {
+        download.file(location, "stringency.csv")
+        data <- read.csv(file = 'stringency.csv')
+        return(data)
+    }
+
     #Filter Time and Incidence data for a given country. Also provides a moving average of window W
     filter_data <- function(data,country, W=7) {
         datos_country <- data[data$location == country,]
@@ -29,6 +35,15 @@ shinyServer(function(input, output, session) {
         incidencia_ma <- stats::filter(incidencia, rep(1/W,W),sides=1)
         datos_incidencia_country <- data.frame(Tiempo=times,Incidencia=incidencia,MediaMovil=incidencia_ma)
         return(datos_incidencia_country)
+    }
+
+    #Filter stringency data
+    filter_stringency_data <- function(data,country) {
+        datos_country <- data[data$CountryName == country,]
+        times <- as.Date(as.character(datos_country[,"Date"]),"%Y%m%d")
+        stringency <- datos_country[,"StringencyIndex"]
+        datos_stringency_country <- data.frame(Tiempo=times,StringencyIndex=stringency)
+        return(datos_stringency_country)
     }
 
     #Estimate R from incidence and parameters
@@ -83,6 +98,20 @@ shinyServer(function(input, output, session) {
               line = list(color = 'rgba(119, 31, 180,0.5)'),
               showlegend = FALSE,
               name = 'Media móvil')
+          return(fig)
+    }
+
+    #Create Plotly Barplot for StringencyIndex
+    plotly_stringency <- function(datos) {
+        fig <- plot_ly(
+            data = datos,
+            x = ~Tiempo,
+            y = ~StringencyIndex,
+            name = "Oxford Stringency Index",
+            type = "scatter",
+            mode = "lines"
+          )
+          fig <- fig %>% layout(yaxis = list(range = c(0, 100)))
           return(fig)
     }
 
@@ -173,6 +202,7 @@ shinyServer(function(input, output, session) {
 
     #Download data
     data <- get_data()
+    stringency_data <- get_stringency_data()
     data_guiad <- reactive(process_data_guiad(get_data_guiad(),W=input$window_ma,W2=input$window_ratio))
 
     #Filter Uruguay
@@ -264,6 +294,18 @@ shinyServer(function(input, output, session) {
 
     output$plot_estimR_country_2 <- renderPlotly({
         plotly_R(estimate_R_country(filter_data(data,input$pais2),window=input$window_R,mean_covid_si=input$mean_covid_si,sd_covid_si=input$sd_covid_si)) %>% layout(
+            xaxis = list(range = input$CommonDates)
+        )
+    })
+
+    output$plot_stringency_country_1 <- renderPlotly({
+        plotly_stringency(filter_stringency_data(stringency_data,input$pais1))  %>% layout(
+            xaxis = list(range = input$CommonDates)
+        )
+    })
+
+    output$plot_stringency_country_2 <- renderPlotly({
+        plotly_stringency(filter_stringency_data(stringency_data,input$pais2))  %>% layout(
             xaxis = list(range = input$CommonDates)
         )
     })
