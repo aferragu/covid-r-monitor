@@ -109,6 +109,13 @@ shinyUI(
                       box(title = "Estimacion de tasa R",plotlyOutput("plot_estimR_country_2", height = 300),status=status2,solidHeader = TRUE,
                       collapsible = TRUE)
                     ),
+                    fluidRow(
+                      box(title = "Oxford Stringency Index",plotlyOutput("plot_stringency_country_1", height = 300),status=status1,solidHeader = TRUE,
+                      collapsible = TRUE),
+                      box(title = "Oxford Stringency Index",plotlyOutput("plot_stringency_country_2", height = 300),status=status2,solidHeader = TRUE,
+                      collapsible = TRUE)
+                    ),
+
                 )
             ),
 
