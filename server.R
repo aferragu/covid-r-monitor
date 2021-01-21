@@ -6,7 +6,7 @@ library(plotly)
 shinyServer(function(input, output, session) {
 
     #####Auxiliary functions
-    
+
     #Get complete data_frame from server
     get_data <- function(location="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/jhu/full_data.csv") {
         download.file(location, "full_data.csv")
@@ -18,6 +18,12 @@ shinyServer(function(input, output, session) {
     get_data_guiad <- function(location="https://raw.githubusercontent.com/GUIAD-COVID/datos-y-visualizaciones-GUIAD/master/datos/estadisticasUY.csv") {
         download.file(location, "estadisticasUY.csv")
         data <- read.csv(file = 'estadisticasUY.csv',na="N/A")
+        return(data)
+    }
+
+    get_stringency_data <- function(location="https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_latest.csv") {
+        download.file(location, "stringency.csv")
+        data <- read.csv(file = 'stringency.csv')
         return(data)
     }
 
