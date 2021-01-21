@@ -6,7 +6,7 @@ library(plotly)
 shinyServer(function(input, output, session) {
 
     #####Auxiliary functions
-
+    
     #Get complete data_frame from server
     get_data <- function(location="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/jhu/full_data.csv") {
         download.file(location, "full_data.csv")
@@ -141,7 +141,8 @@ shinyServer(function(input, output, session) {
             name = "Cant. de casos activos",
             type = "scatter",
             mode = "lines"
-          )
+        )
+        fig <- fig %>% layout(title = "Casos activos")
           return(fig)
     }
 
@@ -151,7 +152,7 @@ shinyServer(function(input, output, session) {
             data = datos,
             x = ~Tiempo,
             y = ~RatioTest,
-            name = "Cant. de casos activos",
+            name = "Ratio de test positivos",
             type = "scatter",
             mode = "lines"
           )
@@ -163,7 +164,7 @@ shinyServer(function(input, output, session) {
               line = list(color = 'rgba(119, 31, 180,0.5)'),
               showlegend = FALSE,
               name = 'Media móvil')
-          fig <- fig %>% layout(yaxis = list(title = "Porcentaje de test positivos"))
+          fig <- fig %>% layout(title = "Porcentaje de test positivos")
           return(fig)
     }
 
@@ -179,19 +180,28 @@ shinyServer(function(input, output, session) {
     datos_R_uy <- reactive(estimate_R_country(datos_incidencia_uy(), window=input$window_R,mean_covid_si=input$mean_covid_si,sd_covid_si=input$sd_covid_si))
 
     output$plot_incidence <- renderPlotly({
-      plotly_incidence(datos_incidencia_uy())
+      plotly_incidence(datos_incidencia_uy()) %>% layout(
+          title = "Incidencia",
+          xaxis = list(range = input$CommonDatesUY)
+      )
     })
 
     output$plot_estimR <- renderPlotly({
-        plotly_R(datos_R_uy())
+        plotly_R(datos_R_uy()) %>% layout(
+            xaxis = list(range = input$CommonDatesUY)
+        )
     })
 
     output$plot_active <- renderPlotly({
-      plotly_active(data_guiad())
+      plotly_active(data_guiad()) %>% layout(
+          xaxis = list(range = input$CommonDatesUY)
+      )
     })
 
     output$plot_test_ratio <- renderPlotly({
-        plotly_test_ratio(data_guiad())
+        plotly_test_ratio(data_guiad()) %>% layout(
+            xaxis = list(range = input$CommonDatesUY)
+        )
     })
 
     output$downloadData <- downloadHandler(
