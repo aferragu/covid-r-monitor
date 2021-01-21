@@ -37,6 +37,15 @@ shinyServer(function(input, output, session) {
         return(datos_incidencia_country)
     }
 
+    #Filter stringency data
+    filter_stringency_data <- function(data,country) {
+        datos_country <- data[data$CountryName == country,]
+        times <- as.Date(as.character(datos_country[,"Date"]))
+        stringency <- datos_country[,"StringencyIndex")]
+        datos_stringency_country <- data.frame(Tiempo=times,StringencyIndex=stringency)
+        return(datos_stringency_country)
+    }
+
     #Estimate R from incidence and parameters
     estimate_R_country <- function(datos,window=7,mean_covid_si=3.95,sd_covid_si=4.75,delta_si=30) {
 
