@@ -48,6 +48,18 @@ shinyUI(
                       infoBoxOutput("uruguay_ci_upper")
                     ),
                     fluidRow(
+                      div(style = "margin: auto; width: 80%",
+                      sliderInput("CommonDatesUY",
+                          label="Rango temporal:",
+                          min = as.Date("2020-03-13","%Y-%m-%d"),
+                          max = Sys.Date(),
+                          value=c(as.Date("2019-12-01","%Y-%m-%d"),Sys.Date()),
+                          timeFormat="%Y-%m-%d",
+                          width="100%",
+                          step = 1)
+                        )
+                    ),
+                    fluidRow(
                       box(title = "Casos registrados", plotlyOutput("plot_incidence", height = 300),status="primary",solidHeader = TRUE,
                 collapsible = TRUE),
                       box(title = "Estimación de tasa R",plotlyOutput("plot_estimR", height = 300),status="primary",solidHeader = TRUE,
@@ -74,6 +86,18 @@ shinyUI(
                       collapsible = TRUE)
                     ),
                     fluidRow(
+                      div(style = "margin: auto; width: 80%",
+                      sliderInput("CommonDates",
+                          label="Rango temporal:",
+                          min = as.Date("2019-12-01","%Y-%m-%d"),
+                          max = Sys.Date(),
+                          value=c(as.Date("2019-12-01","%Y-%m-%d"),Sys.Date()),
+                          timeFormat="%Y-%m-%d",
+                          width="100%",
+                          step = 1)
+                        )
+                    ),
+                    fluidRow(
                       box(title = "Casos registrados", plotlyOutput("plot_incidence_country_1", height = 300),status=status1,solidHeader = TRUE,
                       collapsible = TRUE),
                       box(title = "Casos registrados", plotlyOutput("plot_incidence_country_2", height = 300),status=status2,solidHeader = TRUE,
@@ -85,6 +109,13 @@ shinyUI(
                       box(title = "Estimacion de tasa R",plotlyOutput("plot_estimR_country_2", height = 300),status=status2,solidHeader = TRUE,
                       collapsible = TRUE)
                     ),
+                    fluidRow(
+                      box(title = "Oxford Stringency Index",plotlyOutput("plot_stringency_country_1", height = 300),status=status1,solidHeader = TRUE,
+                      collapsible = TRUE),
+                      box(title = "Oxford Stringency Index",plotlyOutput("plot_stringency_country_2", height = 300),status=status2,solidHeader = TRUE,
+                      collapsible = TRUE)
+                    ),
+
                 )
             ),
 

@@ -1,13 +1,12 @@
-FROM virtualstaticvoid/heroku-docker-r
+FROM rocker/shiny
 
-COPY Aptfile /app
-RUN apt-get update -q && cat Aptfile | xargs apt-get -qy install && rm -rf /var/lib/apt/lists/*
+WORKDIR /home/shiny/
 
-COPY init.R /app
-RUN /usr/bin/R --no-init-file --no-save --quiet --slave -f /app/init.R
+COPY init.R .
+RUN /usr/local/bin/R --no-init-file --no-save --quiet --slave -f init.R
 
 ENV PORT=8080
 
-COPY server.R run.R ui.R /app/
-COPY www/* /app/www/
-CMD ["/usr/bin/R", "--no-save", "--gui-none", "-f /app/run.R"]
+COPY server.R run.R ui.R ./
+COPY www/* ./www/
+CMD ["/usr/local/bin/R", "--no-save", "--gui-none", "-f run.R"]

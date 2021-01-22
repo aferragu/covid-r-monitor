@@ -1,22 +1,22 @@
-FROM virtualstaticvoid/heroku-docker-r
+FROM rocker/shiny
 
-COPY Aptfile /app
-RUN apt-get update -q && cat Aptfile | xargs apt-get -qy install && rm -rf /var/lib/apt/lists/*
+ENV BASEPATH = /home/shiny/
+WORKDIR $BASEPATH
 
-COPY init.R /app
-RUN /usr/bin/R --no-init-file --no-save --quiet --slave -f /app/init.R
+COPY init.R .
+RUN /usr/local/bin/R --no-init-file --no-save --quiet --slave -f init.R
 
 ENV PORT=8080
 
-COPY server.R run.R ui.R /app/
-COPY www/* /app/www/
+COPY server.R run.R ui.R ./
+COPY www/* ./www/
 
 # To run on Openshift
 COPY ./openshift/uid_entrypoint /
 RUN chmod g=u /etc/passwd \
-    && chgrp -R 0 /app \
-    && chmod -R g=u /app
+    && chgrp -R 0 $BASEPATH \
+    && chmod -R g=u $BASEPATH
 
 ENTRYPOINT [ "/uid_entrypoint" ]
 
-CMD ["/usr/bin/R", "--no-save", "--gui-none", "-f /app/run.R"]
+CMD ["/usr/local/bin/R", "--no-save", "--gui-none", "-f run.R"]
