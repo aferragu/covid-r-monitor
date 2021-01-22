@@ -1,6 +1,7 @@
 FROM rocker/shiny
 
-WORKDIR /home/shiny/
+ENV BASEPATH = /home/shiny/
+WORKDIR $BASEPATH
 
 COPY init.R .
 RUN /usr/local/bin/R --no-init-file --no-save --quiet --slave -f init.R
@@ -13,8 +14,8 @@ COPY www/* ./www/
 # To run on Openshift
 COPY ./openshift/uid_entrypoint /
 RUN chmod g=u /etc/passwd \
-    && chgrp -R 0 /app \
-    && chmod -R g=u /app
+    && chgrp -R 0 $BASEPATH \
+    && chmod -R g=u $BASEPATH
 
 ENTRYPOINT [ "/uid_entrypoint" ]
 
