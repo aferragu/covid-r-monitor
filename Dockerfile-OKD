@@ -1,6 +1,6 @@
 FROM rocker/shiny
 
-ENV BASEPATH = /home/shiny/
+ENV BASEPATH=/home/shiny/
 WORKDIR $BASEPATH
 
 COPY init.R .
