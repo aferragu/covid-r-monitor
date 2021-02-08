@@ -310,11 +310,4 @@ shinyServer(function(input, output, session) {
         )
     })
 
-    ### Auxiliary function to avoid timeouts
-    autoInvalidate <- reactiveTimer(10000)
-    observe({
-        autoInvalidate()
-        cat(".")
-    })
-
 })
