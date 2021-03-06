@@ -6,6 +6,6 @@ Based on the [EpiEstim library](https://cran.r-project.org/package=EpiEstim) for
 
 **Authors:** Andres Ferragut and Ernesto Mordecki.
 
-See it working [here!](http://covid-r-monitor.herokuapp.com)
+See it working [here!](http://covid-monitor.agesic.gub.uy)
 
 Data source: [Our world in data](https://ourworldindata.org/coronavirus-source-data)
