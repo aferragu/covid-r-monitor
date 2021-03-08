@@ -18,6 +18,8 @@ shinyServer(function(input, output, session) {
     get_data_guiad <- function(location="https://raw.githubusercontent.com/GUIAD-COVID/datos-y-visualizaciones-GUIAD/master/datos/estadisticasUY.csv") {
         download.file(location, "estadisticasUY.csv")
         data <- read.csv(file = 'estadisticasUY.csv',na="N/A")
+        data[,"fecha"] <- as.Date(data[,"fecha"],format="%d/%m/%Y")
+        data <- data[order(data[,"fecha"]),]
         return(data)
     }
 
@@ -69,7 +71,8 @@ shinyServer(function(input, output, session) {
     #Process GUIAD data to get active cases and positive test ratio
     process_data_guiad <- function(datos, W=7, W2=3) {
 
-        fecha <- as.Date(datos[,"fecha"],format="%d/%m/%Y")
+#        fecha <- as.Date(datos[,"fecha"],format="%d/%m/%Y")
+        fecha <- datos[,"fecha"]
         incidencia <- datos[,"cantCasosNuevos"]
         incidencia_ma <- stats::filter(as.numeric(incidencia), rep(1,W)/W, sides=1)
         activos <- datos[,"cantPersonasConInfeccionEnCurso"]
