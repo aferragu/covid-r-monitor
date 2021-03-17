@@ -1,33 +1,6 @@
-library(shiny)
-library(shinydashboard)
-library(EpiEstim)
-library(plotly)
-
 shinyServer(function(input, output, session) {
 
     #####Auxiliary functions
-
-    #Get complete data_frame from server
-    get_data <- function(location="https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/jhu/full_data.csv") {
-        download.file(location, "full_data.csv")
-        data <- read.csv(file = 'full_data.csv')
-        return(data)
-    }
-
-    #Get complete data_frame from GUIAD
-    get_data_guiad <- function(location="https://raw.githubusercontent.com/GUIAD-COVID/datos-y-visualizaciones-GUIAD/master/datos/estadisticasUY.csv") {
-        download.file(location, "estadisticasUY.csv")
-        data <- read.csv(file = 'estadisticasUY.csv',na="N/A")
-        data[,"fecha"] <- as.Date(data[,"fecha"],format="%d/%m/%Y")
-        data <- data[order(data[,"fecha"]),]
-        return(data)
-    }
-
-    get_stringency_data <- function(location="https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_latest.csv") {
-        download.file(location, "stringency.csv")
-        data <- read.csv(file = 'stringency.csv')
-        return(data)
-    }
 
     #Filter Time and Incidence data for a given country. Also provides a moving average of window W
     filter_data <- function(data,country, W=7) {
@@ -71,7 +44,6 @@ shinyServer(function(input, output, session) {
     #Process GUIAD data to get active cases and positive test ratio
     process_data_guiad <- function(datos, W=7, W2=3) {
 
-#        fecha <- as.Date(datos[,"fecha"],format="%d/%m/%Y")
         fecha <- datos[,"fecha"]
         incidencia <- datos[,"cantCasosNuevos"]
         incidencia_ma <- stats::filter(as.numeric(incidencia), rep(1,W)/W, sides=1)
@@ -206,8 +178,10 @@ shinyServer(function(input, output, session) {
     #Download data
     data <- get_data()
     stringency_data <- get_stringency_data()
-    data_guiad <- reactive(process_data_guiad(get_data_guiad(),W=input$window_ma,W2=input$window_ratio))
+    guiad<- get_data_guiad()
 
+    data_guiad <- reactive(process_data_guiad(guiad,W=input$window_ma,W2=input$window_ratio))
+    
     #Filter Uruguay
     datos_incidencia_uy <- reactive(data_guiad())
     datos_R_uy <- reactive(estimate_R_country(datos_incidencia_uy(), window=input$window_R,mean_covid_si=input$mean_covid_si,sd_covid_si=input$sd_covid_si))

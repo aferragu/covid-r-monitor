@@ -1,7 +1,3 @@
-library(shiny)
-library(shinydashboard)
-library(plotly)
-
 status1 <- "primary"
 status2 <- "info"
 
@@ -53,7 +49,7 @@ shinyUI(
                           label="Rango temporal:",
                           min = as.Date("2020-03-13","%Y-%m-%d"),
                           max = Sys.Date(),
-                          value=c(as.Date("2019-12-01","%Y-%m-%d"),Sys.Date()),
+                          value=c(as.Date("2020-03-13","%Y-%m-%d"),Sys.Date()),
                           timeFormat="%Y-%m-%d",
                           width="100%",
                           step = 1)
