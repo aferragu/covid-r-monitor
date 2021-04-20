@@ -48,8 +48,8 @@ shinyUI(
                       sliderInput("CommonDatesUY",
                           label="Rango temporal:",
                           min = as.Date("2020-03-13","%Y-%m-%d"),
-                          max = as.Date(tail(get_data_guiad()[,"fecha"],n=1)), #Sys.Date(),
-                          value=c(as.Date("2020-03-13","%Y-%m-%d"),as.Date(tail(get_data_guiad()[,"fecha"],n=1))),
+                          max = Sys.Date(),
+                          value=c(as.Date("2020-03-13","%Y-%m-%d"),Sys.Date()),
                           timeFormat="%Y-%m-%d",
                           width="100%",
                           step = 1)

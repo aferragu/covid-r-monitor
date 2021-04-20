@@ -180,6 +180,10 @@ shinyServer(function(input, output, session) {
     stringency_data <- get_stringency_data()
     guiad<- get_data_guiad()
 
+    #ugly: to update the end of the timeframe on load
+    updateSliderInput(inputId = "CommonDates", max = as.Date(tail(data[,"date"],n=1)), value=c(as.Date("2019-12-01","%Y-%m-%d"),as.Date(tail(data[,"date"],n=1))))
+    updateSliderInput(inputId = "CommonDatesUY", max = as.Date(tail(guiad[,"fecha"],n=1)), value=c(as.Date("2020-03-13","%Y-%m-%d"),as.Date(tail(guiad[,"fecha"],n=1))))
+
     data_guiad <- reactive(process_data_guiad(guiad,W=input$window_ma,W2=input$window_ratio))
 
     #Filter Uruguay
