@@ -1,4 +1,4 @@
-FROM rocker/shiny:4.0.3
+FROM rocker/shiny:4.1.0
 
 WORKDIR /home/shiny/
 
