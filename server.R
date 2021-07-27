@@ -227,21 +227,21 @@ shinyServer(function(input, output, session) {
     output$uruguay <- renderInfoBox({
         infoBox(
           "R actual Uruguay",
-          tail(datos_R_uy()$R, n=1)
+          round(tail(datos_R_uy()$R, n=1),digits=4)
         )
     })
 
     output$uruguay_ci_lower <- renderInfoBox({
         infoBox(
           "Cuantil 0.025",
-          tail(datos_R_uy()$Rl, n=1)
+          round(tail(datos_R_uy()$Rl, n=1),digits=4)
         )
     })
 
     output$uruguay_ci_upper <- renderInfoBox({
         infoBox(
           "Cuantil 0.975",
-          tail(datos_R_uy()$Ru, n=1)
+          round(tail(datos_R_uy()$Ru, n=1),digits=4)
         )
     })
 
