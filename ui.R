@@ -39,19 +39,25 @@ shinyUI(
               tabItem(tabName = "uruguay",
 
                     fluidRow(
-                      infoBoxOutput("uruguay"),
-                      infoBoxOutput("uruguay_ci_lower"),
-                      infoBoxOutput("uruguay_ci_upper")
+                      #infoBoxOutput("uruguay"),
+                      #infoBoxOutput("uruguay_ci_lower"),
+                      #infoBoxOutput("uruguay_ci_upper")
+                      box(
+                        title = "Nota", solidHeader = TRUE, status = "warning", width=12,
+                          "Con el fin de la emergencia sanitaria, esta página no actualizará 
+                          nuevos datos y solo mantendrá a modo de archivo las estimaciones realizadas hasta el 17/04/2022"
+                        )
                     ),
                     fluidRow(
-                      div(style = "margin: auto; width: 80%",
+                      box(title="Fechas", solidHeader = TRUE, status = "primary", width=12, align="center",
+
                       sliderInput("CommonDatesUY",
-                          label="Rango temporal:",
+                          label="Seleccione rango temporal:",
                           min = as.Date("2020-03-13","%Y-%m-%d"),
-                          max = Sys.Date(),
-                          value=c(as.Date("2020-03-13","%Y-%m-%d"),Sys.Date()),
+                          max = as.Date("2022-04-17","%Y-%m-%d"), #fixed to the end of data
+                          value = c(as.Date("2020-03-13","%Y-%m-%d"), as.Date("2022-04-17","%Y-%m-%d")),
                           timeFormat="%Y-%m-%d",
-                          width="100%",
+                          width="80%",
                           step = 1)
                         )
                     ),
