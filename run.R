@@ -4,7 +4,13 @@ library(memoise)
 library(plotly)
 library(EpiEstim)
 
-port <- Sys.getenv('PORT')
+#port <- Sys.getenv('PORT')
+if( Sys.getenv('PORT') != ""){
+    port <- Sys.getenv('PORT')
+} else {
+    port = 8000
+}
+
 cache_timeout <- 1800 #half an hour
 
 ## Functions to get the data
