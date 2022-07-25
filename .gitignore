@@ -1,3 +1,5 @@
-*.code-workspace
 *.csv
-*.R*
+*.code-workspace
+*.Rproj
+*.Rproj.user
+*.Rhistory
