@@ -30,7 +30,7 @@ get_data_guiad <- memoise(function(location="https://raw.githubusercontent.com/G
     return(data)
 }, cache = cachem::cache_mem(max_age = cache_timeout))
 
-get_stringency_data <- memoise(function(location="https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_latest.csv") {
+get_stringency_data <- memoise(function(location="https://raw.githubusercontent.com/OxCGRT/covid-policy-tracker/master/data/OxCGRT_nat_latest.csv") {
     download.file(location, "stringency.csv")
     data <- read.csv(file = 'stringency.csv')
     return(data)

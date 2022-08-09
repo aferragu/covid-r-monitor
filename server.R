@@ -16,7 +16,7 @@ shinyServer(function(input, output, session) {
     filter_stringency_data <- function(data,country) {
         datos_country <- data[data$CountryName == country & data$Jurisdiction=="NAT_TOTAL",]
         times <- as.Date(as.character(datos_country[,"Date"]),"%Y%m%d")
-        stringency <- datos_country[,"StringencyIndex"]
+        stringency <- datos_country[,"StringencyIndex_Average"]
         datos_stringency_country <- data.frame(Tiempo=times,StringencyIndex=stringency)
         return(datos_stringency_country)
     }
