@@ -4,7 +4,7 @@ status2 <- "info"
 shinyUI(
 
     dashboardPage(
-      dashboardHeader(title = "COVID R Monitor",
+      dashboardHeader(title = "COVID-19 Reproduction Rate Monitor",
                       tags$li(tags$img(src="logogach.png",height="50px"),class="dropdown")
       ),
 
